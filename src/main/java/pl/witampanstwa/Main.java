@@ -1,6 +1,5 @@
 package pl.witampanstwa;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 
 import java.io.IOException;
@@ -23,6 +22,6 @@ public class Main {
             System.out.println(e.toString());
         }
 
-        Matcher matcher = new Matcher(wykaz, zlecenie);
+        DataMatcher dataMatcher = new DataMatcher(wykaz, zlecenie);
     }
 }

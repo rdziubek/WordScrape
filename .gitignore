@@ -1,4 +1,5 @@
 .idea
+.gradle
 data
 .DS_Store
 venv

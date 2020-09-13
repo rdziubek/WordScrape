@@ -2,10 +2,10 @@ package pl.witampanstwa;
 
 public class Building {
     private final String street;
-    private final int number;
+    private final String number;
     private final String numbers;
 
-    public Building(String street, int number, String numbers) {
+    public Building(String street, String number, String numbers) {
         this.street = street;
         this.number = number;
         this.numbers = numbers;
@@ -15,7 +15,7 @@ public class Building {
         return street;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 

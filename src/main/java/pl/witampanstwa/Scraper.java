@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class Scraper {
-    private Matcher matcher;
     private final List<String> tableRows = new ArrayList<>();
 
     public Scraper(String document_location) throws IOException {
@@ -25,7 +24,7 @@ public class Scraper {
                 StringBuilder rowString = new StringBuilder();
                 for (int colIndex = 0; colIndex < row.numCells(); colIndex++) {
                     TableCell cell = row.getCell(colIndex);
-                    rowString.append(" ").append(cell.getParagraph(0).text());
+                    rowString.append(" ").append(cell.getParagraph(0).text().replace("\u0007", ""));
                 }
                 tableRows.add(rowString.toString().trim());
             }
