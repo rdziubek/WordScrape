@@ -2,61 +2,49 @@ package pl.witampanstwa;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DataMatcher {
-    private final Pattern REGEX_BUILDING_NUMBER_WITH_FLAT_OR_NOT = Pattern.compile("(?:^\\d+[.,]?)|(?:\\d{2,9}[,.]?\\d*\\s*m\\s*2?)|(\\d+[a-zA-z]*[/\\\\]*\\d*)");
-    private final Pattern REGEX_BUILDING_NUMBER = Pattern.compile("(?:[/\\\\]\\d+)|(\\d+[a-zA-z]*)");
-    private final List<String> ascii_source_rows = new ArrayList<>();
-    private final List<String> ascii_target_rows = new ArrayList<>();
-    private List<Building> ascii_source_buildings = new ArrayList<>();
-    private List<Building> ascii_target_buildings = new ArrayList<>();
+    private final List<String> asciiSourceRows = new ArrayList<>();
+    private final List<String> asciiTargetRows = new ArrayList<>();
+    private final List<Building> asciiSourceBuildings = new ArrayList<>();
+    private final List<Building> asciiTargetBuildings = new ArrayList<>();
+    private final Pattern REGEX_BUILDING_NUMBER = Pattern.compile("(?:^\\d+[.,]?)|(?:\\d{2,9}[,.]?\\d*\\s*m\\s*2?)|(\\d+[a-zA-Z]*)(?:[/\\\\]*\\d*)");
+    private final Pattern REGEX_BUILDING_STREET = Pattern.compile("([A-Z]\\w*)[a-z \\t]*(?:\\d+[a-zA-Z]*[/\\\\]*\\d*)");
+    private final Pattern REGEX_BUILDING_NUMBERS = Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2})[ ]?r[,.' ]?)|(?:(?:od|w|W) \\d{4})|(?:\\d+ [A-Z][A-Za-z]+)|(?:[137]-?go)|(?:[Ii]+\\.\\d{4})|(?:\\d{4}|\\d{2} ?r[,.' ]?)|(?:\\d{1,2}\\.\\d{1,2}\\.\\d{4})|(\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:abcd|abc|ab|a)?(?:[,a-d]*)?)");
 
     public DataMatcher(List<String> source, List<String> target) {
-        for (String element : source) {
-            this.ascii_source_rows.add(unidecode(element));
-        }
-        for (String element : target) {
-            this.ascii_target_rows.add(unidecode(element));
-        }
+        source.stream()
+                .filter(Objects::nonNull)
+                .forEach(element -> this.asciiSourceRows.add(unidecode(element)));
+        target.stream()
+                .filter(Objects::nonNull)
+                .forEach(element -> this.asciiTargetRows.add(unidecode(element)));
 
-        for (String row : ascii_source_rows) {
-            this.ascii_source_buildings.add(new Building("street_holder", "number_holder", "numbers_holder"));
-        }
-        for (String row : ascii_target_rows) {
-            System.out.println('\n' + row);
-            Matcher numberFlatMatcher = REGEX_BUILDING_NUMBER_WITH_FLAT_OR_NOT.matcher(row);
-            List<String> numberMatches = new ArrayList<>();
-            List<String> numberFlatMatches = new ArrayList<>();
-            while (numberFlatMatcher.find()) {
-                String flatMatch = numberFlatMatcher.group(1);
-                if (flatMatch != null) {
-                    Matcher numberMatcher = REGEX_BUILDING_NUMBER.matcher(flatMatch);
-                    while (numberMatcher.find()){
-                        String match = numberMatcher.group(1);
-                        if (match != null) {
-                            numberMatches.add(match);
-                        }
-                    }
-                    numberFlatMatches.add(flatMatch);
-                }
+        asciiSourceRows.forEach(row -> this.asciiSourceBuildings.add(
+                new Building(
+                        String.join("", findall(REGEX_BUILDING_STREET, row, 1)),
+                        findall(REGEX_BUILDING_NUMBERS, row, 1))));
+
+        asciiTargetRows.forEach(row -> this.asciiTargetBuildings.add(
+                new Building(
+                        String.join("", findall(REGEX_BUILDING_STREET, row, 1)),
+                        findall(REGEX_BUILDING_NUMBER, row, 1))));
+    }
+
+    private List<String> findall(Pattern regex, String string, int group) {
+        List<String> matches = new ArrayList<>();
+        Matcher matcher = regex.matcher(string);
+
+        while (matcher.find()) {
+            String match = matcher.group(group);
+            if (match != null) {
+                matches.add(match);
             }
-            this.ascii_target_buildings.add(
-                    new Building(
-                            "street_holder",
-                            numberMatches.get(0),
-                            "numbers_holder"));
-            System.out.println(numberFlatMatches.toString());
         }
-
-        for (Building b : ascii_target_buildings) {
-            System.out.println();
-            System.out.println(b);
-            System.out.println(b.getStreet());
-            System.out.println(b.getNumber());
-            System.out.println(b.getNumbers());
-        }
+        return matches;
     }
 
     private String unidecode(String string) {

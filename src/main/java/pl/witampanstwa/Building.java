@@ -1,13 +1,13 @@
 package pl.witampanstwa;
 
+import java.util.List;
+
 public class Building {
     private final String street;
-    private final String number;
-    private final String numbers;
+    private final List<String> numbers;
 
-    public Building(String street, String number, String numbers) {
+    public Building(String street, List<String> numbers) {
         this.street = street;
-        this.number = number;
         this.numbers = numbers;
     }
 
@@ -15,11 +15,7 @@ public class Building {
         return street;
     }
 
-    public String getNumber() {
-        return number;
-    }
-
-    public String getNumbers() {
+    public List<String> getNumbers() {
         return numbers;
     }
 }
