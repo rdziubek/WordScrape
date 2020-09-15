@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+public class WordScrape {
     public static void main(String[] args) {
         List<String> wykaz = new ArrayList<>();
         List<String> zlecenie = new ArrayList<>();
@@ -23,6 +23,5 @@ public class Main {
         }
 
         DataMatcher dataMatcher = new DataMatcher(wykaz, zlecenie);
-        DataParser dataParser = new DataParser(wykaz, zlecenie);
     }
 }

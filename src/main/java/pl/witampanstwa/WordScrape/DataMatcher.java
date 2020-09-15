@@ -36,6 +36,11 @@ public class DataMatcher {
                         findAll(REGEX_BUILDING_STREET, row, 1),
                         findAll(REGEX_BUILDING_NUMBER, row, 1)))
                 .collect(Collectors.toList());
+
+        // TODO: dummy(?) invocation
+        DataParser dataParser = new DataParser(
+                asciiSourceBuildings.stream().map(Building::getNumbers).collect(Collectors.toList()),
+                asciiTargetBuildings.stream().map(Building::getNumbers).collect(Collectors.toList()));
     }
 
     private List<String> findAll(Pattern regex, String string, int group) {
