@@ -1,8 +1,0 @@
-pl/witampanstwa/Scraper.java
- pl.witampanstwa.Scraper
-pl/witampanstwa/Building.java
- pl.witampanstwa.Building
-pl/witampanstwa/DataMatcher.java
- pl.witampanstwa.DataMatcher
-pl/witampanstwa/Main.java
- pl.witampanstwa.Main
