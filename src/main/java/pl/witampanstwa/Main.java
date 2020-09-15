@@ -12,7 +12,7 @@ public class Main {
         List<String> zlecenie = new ArrayList<>();
 
         // TODO: Implement doc/docx switching (not via OfficeXmlFileException `file`)
-        // TODO: Make location strings a single list in this scope here; requires deprecation of column-based matching
+        // TODO: Make location strings a single list in this scope here; requires full deprecation of column-based matching
         try {
             wykaz = new Scraper("data/INWENTAR..doc")
                     .getTableRows();
