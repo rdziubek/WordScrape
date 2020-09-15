@@ -1,4 +1,4 @@
-package pl.witampanstwa;
+package pl.witampanstwa.WordScrape;
 
 import java.util.ArrayList;
 import java.util.List;

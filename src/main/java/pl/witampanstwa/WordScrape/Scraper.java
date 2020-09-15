@@ -1,4 +1,4 @@
-package pl.witampanstwa;
+package pl.witampanstwa.WordScrape;
 
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.*;

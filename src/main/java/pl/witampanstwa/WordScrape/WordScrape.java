@@ -1,4 +1,4 @@
-package pl.witampanstwa;
+package pl.witampanstwa.WordScrape;
 
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 
@@ -23,5 +23,6 @@ public class Main {
         }
 
         DataMatcher dataMatcher = new DataMatcher(wykaz, zlecenie);
+        DataParser dataParser = new DataParser(wykaz, zlecenie);
     }
 }
