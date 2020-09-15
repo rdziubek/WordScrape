@@ -1,5 +1,7 @@
-.idea
-.gradle
+.idea/
+*.iml
+.gradle/
+build/
 data
 .DS_Store
 venv
