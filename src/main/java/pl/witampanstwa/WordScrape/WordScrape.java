@@ -23,5 +23,8 @@ public class WordScrape {
         }
 
         DataMatcher dataMatcher = new DataMatcher(wykaz, zlecenie);
+        DataParser dataParser = new DataParser(
+                dataMatcher.getAsciiSourceBuildings(),
+                dataMatcher.getAsciiTargetBuildings());
     }
 }

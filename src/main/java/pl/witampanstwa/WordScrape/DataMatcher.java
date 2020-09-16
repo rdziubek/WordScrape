@@ -7,11 +7,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * Produces ready lists of `Buildings`, provided according row records as input
+ */
 public class DataMatcher {
-    private List<Building> asciiSourceBuildings;
-    private List<Building> asciiTargetBuildings;
-    private final List<String> asciiSourceRows;
-    private final List<String> asciiTargetRows;
+    private final List<Building> asciiSourceBuildings;
+    private final List<Building> asciiTargetBuildings;
     private final Pattern REGEX_BUILDING_NUMBER =
             Pattern.compile("(?:^\\d+[.,]?)" +
                     "|(?:\\d{2,9}[,.]?\\d*\\s*m\\s*2?)" +
@@ -32,11 +33,11 @@ public class DataMatcher {
                     "|(\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:abcd|abc|ab|a)?(?:[,a-d]*)?)");
 
     public DataMatcher(List<String> source, List<String> target) {
-        asciiSourceRows = source.stream()
+        List<String> asciiSourceRows = source.stream()
                 .filter(Objects::nonNull)
                 .map(this::unidecode)
                 .collect(Collectors.toList());
-        asciiTargetRows = target.stream()
+        List<String> asciiTargetRows = target.stream()
                 .filter(Objects::nonNull)
                 .map(this::unidecode)
                 .collect(Collectors.toList());
@@ -51,11 +52,14 @@ public class DataMatcher {
                         findAll(REGEX_BUILDING_STREET, row, 1),
                         findAll(REGEX_BUILDING_NUMBER, row, 1)))
                 .collect(Collectors.toList());
+    }
 
-        // TODO: dummy(?) invocation
-        DataParser dataParser = new DataParser(
-                asciiSourceBuildings.stream().map(Building::getNumbers).collect(Collectors.toList()),
-                asciiTargetBuildings.stream().map(Building::getNumbers).collect(Collectors.toList()));
+    public List<Building> getAsciiSourceBuildings() {
+        return asciiSourceBuildings;
+    }
+
+    public List<Building> getAsciiTargetBuildings() {
+        return asciiTargetBuildings;
     }
 
     private List<String> findAll(Pattern regex, String string, int group) {
