@@ -12,9 +12,24 @@ public class DataMatcher {
     private List<Building> asciiTargetBuildings;
     private final List<String> asciiSourceRows;
     private final List<String> asciiTargetRows;
-    private final Pattern REGEX_BUILDING_NUMBER = Pattern.compile("(?:^\\d+[.,]?)|(?:\\d{2,9}[,.]?\\d*\\s*m\\s*2?)|(\\d+[a-zA-Z]*)(?:[/\\\\]*\\d*)");
-    private final Pattern REGEX_BUILDING_STREET = Pattern.compile("([A-Z]\\w*)[a-z \\t]*(?:\\d+[a-zA-Z]*[/\\\\]*\\d*)");
-    private final Pattern REGEX_BUILDING_NUMBERS = Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2})[ ]?r[,.' ]?)|(?:(?:od|w|W) \\d{4})|(?:\\d+ [A-Z][A-Za-z]+)|(?:[137]-?go)|(?:[Ii]+\\.\\d{4})|(?:\\d{4}|\\d{2} ?r[,.' ]?)|(?:\\d{1,2}\\.\\d{1,2}\\.\\d{4})|(\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:abcd|abc|ab|a)?(?:[,a-d]*)?)");
+    private final Pattern REGEX_BUILDING_NUMBER =
+            Pattern.compile("(?:^\\d+[.,]?)" +
+                    "|(?:\\d{2,9}[,.]?\\d*\\s*m\\s*2?)" +
+                    "|(\\d+[a-zA-Z]*)" +
+                    "(?:[/\\\\]*\\d*)");
+    private final Pattern REGEX_BUILDING_STREET =
+            Pattern.compile("([A-Z]\\w*)" +
+                    "[a-z \\t]*" +
+                    "(?:\\d+[a-zA-Z]*[/\\\\]*\\d*)");
+    private final Pattern REGEX_BUILDING_NUMBERS =
+            Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2})[ ]?r[,.' ]?)" +
+                    "|(?:(?:od|w|W) \\d{4})" +
+                    "|(?:\\d+ [A-Z][A-Za-z]+)" +
+                    "|(?:[137]-?go)" +
+                    "|(?:[Ii]+\\.\\d{4})" +
+                    "|(?:\\d{4}|\\d{2} ?r[,.' ]?)" +
+                    "|(?:\\d{1,2}\\.\\d{1,2}\\.\\d{4})" +
+                    "|(\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:abcd|abc|ab|a)?(?:[,a-d]*)?)");
 
     public DataMatcher(List<String> source, List<String> target) {
         asciiSourceRows = source.stream()
