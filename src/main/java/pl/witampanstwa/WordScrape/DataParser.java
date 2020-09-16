@@ -20,10 +20,10 @@ public class DataParser {
                 .map(Building::getStreet)
                 .collect(Collectors.toList());
         List<List<String>> numbersLookedFor = itemsLookedFor.stream()
-                .map(Building::getStreet)
+                .map(Building::getNumbers)
                 .collect(Collectors.toList());
         List<List<String>> numbersLookedThrough = itemsLookedThrough.stream()
-                .map(Building::getStreet)
+                .map(Building::getNumbers)
                 .collect(Collectors.toList());
 
         this.isInRange = isStreetInRange(streetsLookedFor, streetsLookedThrough)
@@ -35,7 +35,6 @@ public class DataParser {
         return false;
     }
 
-    // TODO: adopt this to fit either 1- or 2-dimensional lists; similar needs to be done in `isNumberInRange`.
     private boolean isStreetInRange(List<List<String>> what, List<List<String>> where) {
         int currentPosition = 0;
         return false;
