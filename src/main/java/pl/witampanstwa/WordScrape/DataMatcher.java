@@ -69,7 +69,7 @@ public class DataMatcher {
         while (matcher.find()) {
             String match = matcher.group(group);
             if (match != null) {
-                matches.add(match);
+                matches.add(match.replaceAll("[ ,.;:]", ""));
             }
         }
         return matches;
