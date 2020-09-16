@@ -32,12 +32,15 @@ public class DataParser {
 
     private boolean isNumberInRange(List<List<String>> what, List<List<String>> where) {
         int currentPosition = 0;
-        return false;
+        for (List<String> element : what) {
+            System.out.println(element);
+        }
+        return true;
     }
 
     private boolean isStreetInRange(List<List<String>> what, List<List<String>> where) {
         int currentPosition = 0;
-        return false;
+        return true;
     }
 
     public boolean isInRange() {
