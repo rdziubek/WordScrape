@@ -1,4 +1,4 @@
-package pl.witampanstwa.WordScrape;
+package pl.witampanstwa.wordscrape;
 
 import java.util.List;
 import java.util.stream.Collectors;
