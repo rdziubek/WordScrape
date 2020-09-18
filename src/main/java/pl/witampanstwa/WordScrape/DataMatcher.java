@@ -45,12 +45,12 @@ public class DataMatcher {
         asciiSourceBuildings = asciiSourceRows.stream()
                 .map(row -> new Building(
                         findAll(REGEX_BUILDING_STREET, row, 1),
-                        findAll(REGEX_BUILDING_NUMBERS, row, 1)))
+                        findAll(REGEX_BUILDING_NUMBER, row, 1)))
                 .collect(Collectors.toList());
         asciiTargetBuildings = asciiTargetRows.stream()
                 .map(row -> new Building(
                         findAll(REGEX_BUILDING_STREET, row, 1),
-                        findAll(REGEX_BUILDING_NUMBER, row, 1)))
+                        findAll(REGEX_BUILDING_NUMBERS, row, 1)))
                 .collect(Collectors.toList());
     }
 

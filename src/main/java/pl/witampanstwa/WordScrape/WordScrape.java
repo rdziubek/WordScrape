@@ -8,21 +8,21 @@ import java.util.List;
 
 public class WordScrape {
     public static void main(String[] args) {
-        List<String> wykaz = new ArrayList<>();
-        List<String> zlecenie = new ArrayList<>();
+        List<String> sourceRows = new ArrayList<>();
+        List<String> targetRows = new ArrayList<>();
 
         // TODO: Implement doc/docx switching (not via OfficeXmlFileException `file`)
         // TODO: Make location strings a single list in this scope here; requires full deprecation of column-based matching
         try {
-            wykaz = new Scraper("data/INWENTAR..doc")
+            sourceRows = new Scraper("data/Załącznik do zlecenia jednostkowego 9.2018.doc")
                     .getTableRows();
-            zlecenie = new Scraper("data/Załącznik do zlecenia jednostkowego 9.2018.doc")
+            targetRows = new Scraper("data/INWENTAR..doc")
                     .getTableRows();
         } catch (OfficeXmlFileException | IOException e) {
             System.out.println(e.toString());
         }
 
-        DataMatcher dataMatcher = new DataMatcher(wykaz, zlecenie);
+        DataMatcher dataMatcher = new DataMatcher(sourceRows, targetRows);
         DataParser dataParser = new DataParser(
                 dataMatcher.getAsciiSourceBuildings(),
                 dataMatcher.getAsciiTargetBuildings());
