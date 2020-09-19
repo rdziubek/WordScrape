@@ -6,7 +6,7 @@ public class UniqueBuildingMatcher {
     private final String streets;
     private final String numbers;
     private final boolean isInRange = false;
-    private boolean doubtRaised = false;
+    private final boolean doubtRaised = false;
 
 
     public UniqueBuildingMatcher(String streets, String numbers) {
