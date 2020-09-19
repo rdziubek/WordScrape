@@ -15,7 +15,15 @@ public class Building {
         return street;
     }
 
+    public String getStringStreet() {
+        return String.join(", ", street);
+    }
+
     public List<String> getNumbers() {
         return numbers;
+    }
+
+    public String getStringNumbers() {
+        return String.join(", ", numbers);
     }
 }

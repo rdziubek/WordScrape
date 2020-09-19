@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
  * If street's key equals the number's key, these belong to the same record.
  */
 public class DataParser {
+    final List<RowIntersection> intersectedRows = new ArrayList<>();
+    final List<Pair<Integer, Integer>> streetPairs;
+    final List<Pair<Integer, Integer>> numberPairs;
 
     public DataParser(List<Building> itemsLookedFor, List<Building> itemsLookedThrough) {
         List<List<String>> streetsLookedFor = itemsLookedFor.stream()
@@ -25,25 +28,29 @@ public class DataParser {
         List<List<String>> numbersLookedThrough = itemsLookedThrough.stream()
                 .map(Building::getNumbers)
                 .collect(Collectors.toList());
+        streetPairs = getStreetIntersections(streetsLookedFor, streetsLookedThrough);
+        numberPairs = getNumberIntersections(numbersLookedFor, numbersLookedThrough);
 
-        for (Pair<Integer, Integer> streetsPair : getStreetIntersections(streetsLookedFor, streetsLookedThrough)) {
-            for (Pair<Integer, Integer> numbersPair : getNumberIntersections(numbersLookedFor, numbersLookedThrough)) {
+        for (Pair<Integer, Integer> streetsPair : streetPairs) {
+            for (Pair<Integer, Integer> numbersPair : numberPairs) {
                 if (streetsPair.getKey().equals(numbersPair.getKey())
                         && streetsPair.getValue().equals(numbersPair.getValue())) {
-                    System.out.println("\nmatched: ");
-                    System.out.println(streetsLookedFor.get(streetsPair.getKey()));
-                    System.out.println(numbersLookedFor.get(numbersPair.getKey()));
 
-                    System.out.println("with: ");
-                    System.out.println(streetsLookedThrough.get(numbersPair.getValue()));
-                    System.out.println(numbersLookedThrough.get(numbersPair.getValue()));
+                    // Street and number pairs are tied together at this point
+                    int sourceIntersectionIndex = streetsPair.getKey();
+                    int targetIntersectionIndex = streetsPair.getValue();
 
-                    System.out.println("at: ");
-                    System.out.println(streetsPair);
-                    System.out.println(numbersPair);
+                    intersectedRows.add(
+                            new RowIntersection(sourceIntersectionIndex, targetIntersectionIndex,
+                                    itemsLookedFor.get(sourceIntersectionIndex),
+                                    itemsLookedThrough.get(targetIntersectionIndex)));
                 }
             }
         }
+    }
+
+    public List<RowIntersection> getIntersectedRows() {
+        return intersectedRows;
     }
 
     /**
