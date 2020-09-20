@@ -4,6 +4,7 @@ META-INF/
 *.iml
 .gradle/
 build/
+Report.html
 data
 .DS_Store
 venv
