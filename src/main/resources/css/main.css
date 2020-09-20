@@ -1,0 +1,44 @@
+body {
+    font-family: Lato, Roboto, Verdana, sans-serif;
+    color: rgba(0, 0, 0, 0.87);
+    padding: 0;
+    margin: 0;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+    box-sizing: border-box;
+}
+
+tbody * {
+    overflow-x: auto;
+    box-sizing: border-box;
+}
+
+tr * {
+    margin: 0 10em;
+}
+
+tr:hover td {
+    border-bottom: solid .25em rgb(255, 54, 175);
+}
+
+tr:active td {
+    border-bottom: solid .25em rgb(255, 54, 175);
+}
+
+th {
+    padding: .5em;
+    text-align: center;
+    border-bottom: solid .25em rgb(255, 54, 175);
+}
+
+td {
+    height: 50px;
+    padding: 10px;
+}
+
+td * {
+    position: absolute;
+}

@@ -1,6 +1,7 @@
 package pl.witampanstwa.wordscrape;
 
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
+import pl.witampanstwa.wordscrape.report.ReportWriter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,14 +28,16 @@ public class WordScrape {
                 dataMatcher.getAsciiSourceBuildings(),
                 dataMatcher.getAsciiTargetBuildings());
 
-        for (RowIntersection row : dataParser.getIntersectedRows()) {
+        for (RowIntersection intersection : dataParser.getIntersections()) {
             System.out.println();
-            System.out.println("Source index: " + row.getSourceIndex());
-            System.out.println("Target index: " + row.getTargetIndex());
-            System.out.println("Source row: " + sourceRows.get(row.getSourceIndex()));
-            System.out.println("Source model: " + row.getSourceModel().getStreets() + " " + row.getSourceModel().getNumbers());
-            System.out.println("Target row: " + targetRows.get(row.getTargetIndex()));
-            System.out.println("Target model: " + row.getTargetModel().getStreets() + " " + row.getTargetModel().getNumbers());
+            System.out.println("Source index: " + intersection.getSourceIndex());
+            System.out.println("Target index: " + intersection.getTargetIndex());
+            System.out.println("Source row: " + sourceRows.get(intersection.getSourceIndex()));
+            System.out.println("Source model: " + intersection.getSourceModel().getStreets() + " " + intersection.getSourceModel().getNumbers());
+            System.out.println("Target row: " + targetRows.get(intersection.getTargetIndex()));
+            System.out.println("Target model: " + intersection.getTargetModel().getStreets() + " " + intersection.getTargetModel().getNumbers());
         }
+
+        ReportWriter reportWriter = new ReportWriter(dataParser.getIntersections(), sourceRows, targetRows);
     }
 }
