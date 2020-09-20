@@ -12,15 +12,15 @@ import java.util.stream.Collectors;
  */
 public class DataParser {
     final List<RowIntersection> intersectedRows = new ArrayList<>();
-    final List<Pair<Integer, Integer>> streetPairs;
-    final List<Pair<Integer, Integer>> numberPairs;
+    final List<Pair<Integer, Integer>> intersectedStreets;
+    final List<Pair<Integer, Integer>> intersectedNumbers;
 
     public DataParser(List<Building> itemsLookedFor, List<Building> itemsLookedThrough) {
         List<List<String>> streetsLookedFor = itemsLookedFor.stream()
-                .map(Building::getStreet)
+                .map(Building::getStreets)
                 .collect(Collectors.toList());
         List<List<String>> streetsLookedThrough = itemsLookedThrough.stream()
-                .map(Building::getStreet)
+                .map(Building::getStreets)
                 .collect(Collectors.toList());
         List<List<String>> numbersLookedFor = itemsLookedFor.stream()
                 .map(Building::getNumbers)
@@ -28,17 +28,17 @@ public class DataParser {
         List<List<String>> numbersLookedThrough = itemsLookedThrough.stream()
                 .map(Building::getNumbers)
                 .collect(Collectors.toList());
-        streetPairs = getStreetIntersections(streetsLookedFor, streetsLookedThrough);
-        numberPairs = getNumberIntersections(numbersLookedFor, numbersLookedThrough);
+        intersectedStreets = getStreetIntersections(streetsLookedFor, streetsLookedThrough);
+        intersectedNumbers = getNumberIntersections(numbersLookedFor, numbersLookedThrough);
 
-        for (Pair<Integer, Integer> streetsPair : streetPairs) {
-            for (Pair<Integer, Integer> numbersPair : numberPairs) {
-                if (streetsPair.getKey().equals(numbersPair.getKey())
-                        && streetsPair.getValue().equals(numbersPair.getValue())) {
+        for (Pair<Integer, Integer> streets : intersectedStreets) {
+            for (Pair<Integer, Integer> numbers : intersectedNumbers) {
+                if (streets.getKey().equals(numbers.getKey())
+                        && streets.getValue().equals(numbers.getValue())) {
 
                     // Street and number pairs are tied together at this point
-                    int sourceIntersectionIndex = streetsPair.getKey();
-                    int targetIntersectionIndex = streetsPair.getValue();
+                    int sourceIntersectionIndex = streets.getKey();
+                    int targetIntersectionIndex = streets.getValue();
 
                     intersectedRows.add(
                             new RowIntersection(sourceIntersectionIndex, targetIntersectionIndex,

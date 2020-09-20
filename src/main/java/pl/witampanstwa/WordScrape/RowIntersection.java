@@ -5,6 +5,7 @@ public class RowIntersection {
     private final int targetIndex;
     private final Building sourceModel;
     private final Building targetModel;
+    private final boolean doubtRaised = false;
 
     public RowIntersection(int sourceIndex, int targetIndex, Building sourceModel, Building targetModel) {
         this.sourceIndex = sourceIndex;
@@ -27,5 +28,9 @@ public class RowIntersection {
 
     public Building getTargetModel() {
         return targetModel;
+    }
+
+    public boolean isDoubtRaised() {
+        return doubtRaised;
     }
 }

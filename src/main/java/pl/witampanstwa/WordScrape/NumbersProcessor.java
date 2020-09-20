@@ -20,6 +20,7 @@ public class NumbersProcessor {
     }
 
     /**
+     * Differentiates simple-case exact building numbers from ranges.
      * Eliminates the possibility of omitting an exact number in a case `["2-4", "8", "14-20"]` by
      * filtering out ranges by building these on the fly and postponing for further processing
      * instead of doing such in-place.

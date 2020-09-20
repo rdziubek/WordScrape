@@ -5,7 +5,6 @@ import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class WordScrape {
     public static void main(String[] args) {
@@ -32,8 +31,8 @@ public class WordScrape {
             System.out.println();
             System.out.println("Index in source: " + row.getSourceIndex());
             System.out.println("Index in target: " + row.getTargetIndex());
-            System.out.println(row.getSourceModel().getStringStreet() + " " + row.getSourceModel().getStringNumbers());
-            System.out.println(row.getTargetModel().getStringStreet() + " " + row.getTargetModel().getStringNumbers());
+            System.out.println(row.getSourceModel().getStringStreets() + " " + row.getSourceModel().getStringNumbers());
+            System.out.println(row.getTargetModel().getStringStreets() + " " + row.getTargetModel().getStringNumbers());
         }
     }
 }
