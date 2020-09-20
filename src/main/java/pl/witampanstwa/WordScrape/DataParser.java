@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * If street's key equals the number's key, these belong to the same record.
  */
 public class DataParser {
-    final List<RowIntersection> intersectedRows = new ArrayList<>();
+    final List<RowIntersection> intersections = new ArrayList<>();
     final List<Pair<Integer, Integer>> intersectedStreets;
     final List<Pair<Integer, Integer>> intersectedNumbers;
 
@@ -40,7 +40,7 @@ public class DataParser {
                     int sourceIntersectionIndex = streets.getKey();
                     int targetIntersectionIndex = streets.getValue();
 
-                    intersectedRows.add(
+                    intersections.add(
                             new RowIntersection(sourceIntersectionIndex, targetIntersectionIndex,
                                     itemsLookedFor.get(sourceIntersectionIndex),
                                     itemsLookedThrough.get(targetIntersectionIndex)));
@@ -49,8 +49,8 @@ public class DataParser {
         }
     }
 
-    public List<RowIntersection> getIntersectedRows() {
-        return intersectedRows;
+    public List<RowIntersection> getIntersections() {
+        return intersections;
     }
 
     /**
