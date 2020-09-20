@@ -26,7 +26,7 @@ public class Document {
                         head(
                                 title("Intersekcje"),
                                 meta().withCharset("UTF-8"),
-                                style(new ResourceFetcher("/css/main.css").getResource())
+                                style(new ResourceFetcher("/css/main.css").getContent())
                         ),
                         body(
                                 table(
