@@ -29,10 +29,12 @@ public class WordScrape {
 
         for (RowIntersection row : dataParser.getIntersectedRows()) {
             System.out.println();
-            System.out.println("Index in source: " + row.getSourceIndex());
-            System.out.println("Index in target: " + row.getTargetIndex());
-            System.out.println(row.getSourceModel().getStringStreets() + " " + row.getSourceModel().getStringNumbers());
-            System.out.println(row.getTargetModel().getStringStreets() + " " + row.getTargetModel().getStringNumbers());
+            System.out.println("Source index: " + row.getSourceIndex());
+            System.out.println("Target index: " + row.getTargetIndex());
+            System.out.println("Source row: " + sourceRows.get(row.getSourceIndex()));
+            System.out.println("Source model: " + row.getSourceModel().getStreets() + " " + row.getSourceModel().getNumbers());
+            System.out.println("Target row: " + targetRows.get(row.getTargetIndex()));
+            System.out.println("Target model: " + row.getTargetModel().getStreets() + " " + row.getTargetModel().getNumbers());
         }
     }
 }
