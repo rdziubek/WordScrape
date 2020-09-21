@@ -21,36 +21,55 @@ public class Scraper {
 
     public Scraper(String documentLocation) throws IOException {
         if (documentLocation.endsWith("docx")) {
-            File file = new File(documentLocation);
-            FileInputStream fis = new FileInputStream(file);
-            XWPFDocument doc = new XWPFDocument(fis);
+            XWPFDocument doc = new XWPFDocument(
+                    new FileInputStream(
+                            new File(documentLocation)));
             List<XWPFTable> tables = doc.getTables();
 
             for (XWPFTable table : tables) {
                 for (XWPFTableRow row : table.getRows()) {
                     StringBuilder rowString = new StringBuilder();
                     for (XWPFTableCell cell : row.getTableCells()) {
-                        rowString.append(" ").append(cell.getText().replace("\u0007", ""));
+                        rowString.append(" ")
+                                .append(ringThatBellOut(
+                                        cell.getText()));
                     }
                     tableRows.add(rowString.toString().trim());
                 }
             }
         } else if (documentLocation.endsWith("doc")) {
-            HWPFDocument document = new HWPFDocument(new POIFSFileSystem(new FileInputStream(documentLocation)));
+            HWPFDocument document = new HWPFDocument(
+                    new POIFSFileSystem(
+                            new FileInputStream(documentLocation)));
             TableIterator iterator = new TableIterator(document.getRange());
+
             while (iterator.hasNext()) {
                 Table table = iterator.next();
                 for (int rowIndex = 0; rowIndex < table.numRows(); rowIndex++) {
                     TableRow row = table.getRow(rowIndex);
+
                     StringBuilder rowString = new StringBuilder();
                     for (int colIndex = 0; colIndex < row.numCells(); colIndex++) {
-                        TableCell cell = row.getCell(colIndex);
-                        rowString.append(" ").append(cell.getParagraph(0).text().replace("\u0007", ""));
+                        rowString.append(" ")
+                                .append(ringThatBellOut(
+                                        row.getCell(colIndex).getParagraph(0).text()));
                     }
                     tableRows.add(rowString.toString().trim());
                 }
             }
+        } else {
+            throw new FileNotFoundException("Found none of either .doc or .docx files!");
         }
+    }
+
+    /**
+     * Word documents can contain a bell control-char placed after a carriage return, thus this method removes these.
+     *
+     * @param ringingText Word document's content / part of content
+     * @return document's passed in text without bell control-chars
+     */
+    private String ringThatBellOut(String ringingText) {
+        return ringingText.replace("\u0007", "");
     }
 
     public List<String> getTableRows() {
