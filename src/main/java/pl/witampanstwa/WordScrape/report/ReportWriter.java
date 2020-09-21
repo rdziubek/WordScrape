@@ -6,6 +6,8 @@ import pl.witampanstwa.wordscrape.structures.RowIntersection;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class ReportWriter {
@@ -21,9 +23,10 @@ public class ReportWriter {
 
     public void bufferedWrite(String document)
             throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-        writer.write(document);
+        BufferedWriter out = Files.newBufferedWriter(Paths.get(System.getProperty("user.dir") + "/" + fileName));
+        System.out.println("Wiritng to: " + Paths.get(System.getProperty("user.dir") + "/" + fileName));
+        out.write(document);
 
-        writer.close();
+        out.close();
     }
 }
