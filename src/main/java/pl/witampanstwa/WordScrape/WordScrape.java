@@ -25,7 +25,7 @@ public class WordScrape {
             targetRows.addAll(new Scraper(targetFilePath)
                     .getTableRows());
         } catch (OfficeXmlFileException | IOException e) {
-            System.out.println(e.toString());
+            System.out.println("Error while fetching file/files form the filesystem. " + e);
         }
 
         DataMatcher dataMatcher = new DataMatcher(sourceRows, targetRows);
@@ -55,8 +55,8 @@ public class WordScrape {
     /**
      * Performs an ASCII lowercase partial check for files in the current working dir.
      *
-     * @param partOfFilename
-     * @return
+     * @param partOfFilename case-insensitive regex-alike part of a filename, converted to ASCII
+     * @return full file URI
      */
     private static String getPathLike(String partOfFilename) {
         File f = new File(System.getProperty("user.dir"));
@@ -75,7 +75,7 @@ public class WordScrape {
         } else {
             throw new NullPointerException("No applicable file/files found! (i.e. in the working dir)");
         }
-        return "";
+        return null;
     }
 
     private static String unidecode(String string) {
