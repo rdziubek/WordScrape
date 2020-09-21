@@ -5,21 +5,19 @@ import pl.witampanstwa.wordscrape.report.ReportWriter;
 import pl.witampanstwa.wordscrape.structures.RowIntersection;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WordScrape {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
+        final String sourceFilePath = getPathLike("zleceni");
+        final String targetFilePath = getPathLike("inwent");
         final List<String> sourceRows = new ArrayList<>();
         final List<String> targetRows = new ArrayList<>();
 
-        // TODO: Implement doc/docx switching (not via OfficeXmlFileException `file`)
-        // TODO: Make location strings a single list in this scope here; requires full deprecation of column-based matching
         try {
-            String sourceFilePath = getPathLike("zleceni");
-            String targetFilePath = getPathLike("inwent");
-
             sourceRows.addAll(new Scraper(sourceFilePath)
                     .getTableRows());
             targetRows.addAll(new Scraper(targetFilePath)
@@ -58,7 +56,7 @@ public class WordScrape {
      * @param partOfFilename case-insensitive regex-alike part of a filename, converted to ASCII
      * @return full file URI
      */
-    private static String getPathLike(String partOfFilename) {
+    private static String getPathLike(String partOfFilename) throws FileNotFoundException {
         File f = new File(System.getProperty("user.dir"));
         File[] matchingFiles = f.listFiles((dir, name) -> unidecode(name)
                 .toLowerCase()
@@ -72,10 +70,8 @@ public class WordScrape {
                     return matchingFile.getPath();
                 }
             }
-        } else {
-            throw new NullPointerException("No applicable file/files found! (i.e. in the working dir)");
         }
-        return null;
+        throw new FileNotFoundException("No applicable file/files found! (i.e. in the working dir)");
     }
 
     private static String unidecode(String string) {
