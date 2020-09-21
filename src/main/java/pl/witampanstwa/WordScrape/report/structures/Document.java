@@ -1,5 +1,7 @@
-package pl.witampanstwa.wordscrape.report;
+package pl.witampanstwa.wordscrape.report.structures;
 
+import j2html.TagCreator;
+import pl.witampanstwa.wordscrape.report.ResourceFetcher;
 import pl.witampanstwa.wordscrape.structures.RowIntersection;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public class Document {
                         head(
                                 title("Intersekcje"),
                                 meta().withCharset("UTF-8"),
-                                style(new ResourceFetcher("/css/main.css").getContent())
+                                TagCreator.style(new ResourceFetcher("/css/main.css").getContent())
                         ),
                         body(
                                 table(

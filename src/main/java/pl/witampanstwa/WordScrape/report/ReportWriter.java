@@ -1,5 +1,6 @@
 package pl.witampanstwa.wordscrape.report;
 
+import pl.witampanstwa.wordscrape.report.structures.Document;
 import pl.witampanstwa.wordscrape.structures.RowIntersection;
 
 import java.io.BufferedWriter;
@@ -9,15 +10,8 @@ import java.util.List;
 
 public class ReportWriter {
     private final String fileName = "Report.html";
-//    private final List<Pair<String, String>> intersectedRowPairs;
 
     public ReportWriter(List<RowIntersection> intersections, List<String> sourceRows, List<String> targetRows) {
-
-//        intersectedRowPairs = new Pair<String, String>();
-//        for (RowIntersection intersection : intersections) {
-//            sourceRows.get(intersection.getSourceIndex());
-//        }
-
         try {
             bufferedWrite(new Document(intersections, sourceRows, targetRows).getDocument());
         } catch (IOException e) {
