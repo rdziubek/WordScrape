@@ -45,7 +45,11 @@ public class WordScrape {
                     + intersection.getTargetModel().getNumbers());
         }
 
-        ReportWriter reportWriter = new ReportWriter(dataParser.getIntersections(), sourceRows, targetRows);
+        try {
+            ReportWriter reportWriter = new ReportWriter(dataParser.getIntersections(), sourceRows, targetRows);
+        } catch (IOException e) {
+            System.out.println("Cannot write to filesystem. " + e);
+        }
     }
 
     /**
