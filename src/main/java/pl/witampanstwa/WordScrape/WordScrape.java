@@ -2,7 +2,9 @@ package pl.witampanstwa.wordscrape;
 
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import pl.witampanstwa.wordscrape.report.ReportWriter;
+import pl.witampanstwa.wordscrape.structures.RowIntersection;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +17,12 @@ public class WordScrape {
         // TODO: Implement doc/docx switching (not via OfficeXmlFileException `file`)
         // TODO: Make location strings a single list in this scope here; requires full deprecation of column-based matching
         try {
-            sourceRows.addAll(new Scraper("data/Załącznik do zlecenia jednostkowego 9.2018.doc")
+            String sourceFilePath = getPathLike("zleceni");
+            String targetFilePath = getPathLike("inwent");
+
+            sourceRows.addAll(new Scraper(sourceFilePath)
                     .getTableRows());
-            targetRows.addAll(new Scraper("data/INWENTAR..doc")
+            targetRows.addAll(new Scraper(targetFilePath)
                     .getTableRows());
         } catch (OfficeXmlFileException | IOException e) {
             System.out.println(e.toString());
@@ -33,11 +38,43 @@ public class WordScrape {
             System.out.println("Source index: " + intersection.getSourceIndex());
             System.out.println("Target index: " + intersection.getTargetIndex());
             System.out.println("Source row: " + sourceRows.get(intersection.getSourceIndex()));
-            System.out.println("Source model: " + intersection.getSourceModel().getStreets() + " " + intersection.getSourceModel().getNumbers());
+            System.out.println("Source model: " + intersection.getSourceModel().getStreets() + " "
+                    + intersection.getSourceModel().getNumbers());
             System.out.println("Target row: " + targetRows.get(intersection.getTargetIndex()));
-            System.out.println("Target model: " + intersection.getTargetModel().getStreets() + " " + intersection.getTargetModel().getNumbers());
+            System.out.println("Target model: " + intersection.getTargetModel().getStreets() + " "
+                    + intersection.getTargetModel().getNumbers());
         }
 
         ReportWriter reportWriter = new ReportWriter(dataParser.getIntersections(), sourceRows, targetRows);
+    }
+
+    /**
+     * Performs an ASCII lowercase partial check for files in the current working dir.
+     *
+     * @param partOfFilename
+     * @return
+     */
+    private static String getPathLike(String partOfFilename) {
+        File f = new File(System.getProperty("user.dir"));
+        File[] matchingFiles = f.listFiles((dir, name) -> unidecode(name)
+                .toLowerCase()
+                .contains(unidecode(partOfFilename)));
+
+        if (matchingFiles != null) {
+            for (File matchingFile : matchingFiles) {
+                if (matchingFile != null) {
+                    System.out.println("getting the file for: " + partOfFilename
+                            + " with result: " + matchingFile.getPath());
+                    return matchingFile.getPath();
+                }
+            }
+        } else {
+            throw new NullPointerException("No applicable file/files found! (i.e. in the working dir)");
+        }
+        return "";
+    }
+
+    private static String unidecode(String string) {
+        return net.gcardone.junidecode.Junidecode.unidecode(string);
     }
 }

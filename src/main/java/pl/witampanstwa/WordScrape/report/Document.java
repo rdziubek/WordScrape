@@ -1,6 +1,6 @@
 package pl.witampanstwa.wordscrape.report;
 
-import pl.witampanstwa.wordscrape.RowIntersection;
+import pl.witampanstwa.wordscrape.structures.RowIntersection;
 
 import java.util.List;
 

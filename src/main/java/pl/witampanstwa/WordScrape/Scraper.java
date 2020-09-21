@@ -13,8 +13,8 @@ import java.util.List;
 public class Scraper {
     private final List<String> tableRows = new ArrayList<>();
 
-    public Scraper(String document_location) throws IOException {
-        HWPFDocument document = new HWPFDocument(new POIFSFileSystem(new FileInputStream(document_location)));
+    public Scraper(String documentLocation) throws IOException {
+        HWPFDocument document = new HWPFDocument(new POIFSFileSystem(new FileInputStream(documentLocation)));
 
         TableIterator iterator = new TableIterator(document.getRange());
         while (iterator.hasNext()) {

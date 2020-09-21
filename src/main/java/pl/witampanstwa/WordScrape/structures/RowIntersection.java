@@ -1,4 +1,6 @@
-package pl.witampanstwa.wordscrape;
+package pl.witampanstwa.wordscrape.structures;
+
+import pl.witampanstwa.wordscrape.structures.Building;
 
 public class RowIntersection {
     private final int sourceIndex;

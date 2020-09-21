@@ -1,20 +1,11 @@
 package pl.witampanstwa.wordscrape.report;
 
-import j2html.TagCreator;
-import j2html.tags.ContainerTag;
-import javafx.util.Pair;
-import pl.witampanstwa.wordscrape.RowIntersection;
-import pl.witampanstwa.wordscrape.report.Document;
+import pl.witampanstwa.wordscrape.structures.RowIntersection;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import static j2html.TagCreator.*;
 
 public class ReportWriter {
     private final String fileName = "Report.html";
