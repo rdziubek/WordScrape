@@ -5,6 +5,8 @@ META-INF/
 .gradle/
 build/
 Report.html
+*.doc
+*.docx
 data
 .DS_Store
 venv
