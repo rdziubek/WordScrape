@@ -1,6 +1,8 @@
 package pl.witampanstwa.wordscrape;
 
-import javafx.util.Pair;
+import pl.witampanstwa.wordscrape.structures.Building;
+import pl.witampanstwa.wordscrape.structures.IntTuple;
+import pl.witampanstwa.wordscrape.structures.RowIntersection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +14,8 @@ import java.util.stream.Collectors;
  */
 public class DataParser {
     final List<RowIntersection> intersections = new ArrayList<>();
-    final List<Pair<Integer, Integer>> intersectedStreets;
-    final List<Pair<Integer, Integer>> intersectedNumbers;
+    final List<IntTuple> intersectedStreets;
+    final List<IntTuple> intersectedNumbers;
 
     public DataParser(List<Building> itemsLookedFor, List<Building> itemsLookedThrough) {
         List<List<String>> streetsLookedFor = itemsLookedFor.stream()
@@ -31,10 +33,10 @@ public class DataParser {
         intersectedStreets = getStreetIntersections(streetsLookedFor, streetsLookedThrough);
         intersectedNumbers = getNumberIntersections(numbersLookedFor, numbersLookedThrough);
 
-        for (Pair<Integer, Integer> streets : intersectedStreets) {
-            for (Pair<Integer, Integer> numbers : intersectedNumbers) {
-                if (streets.getKey().equals(numbers.getKey())
-                        && streets.getValue().equals(numbers.getValue())) {
+        for (IntTuple streets : intersectedStreets) {
+            for (IntTuple numbers : intersectedNumbers) {
+                if (streets.getKey() == numbers.getKey()
+                        && streets.getValue() == numbers.getValue()) {
 
                     // Street and number pairs are tied together at this point
                     int sourceIntersectionIndex = streets.getKey();
@@ -62,15 +64,15 @@ public class DataParser {
      * @return scattered source-target number-part-only relations, independent from the street part and therefore
      * not tied to a row as a whole
      */
-    private List<Pair<Integer, Integer>> getStreetIntersections(List<List<String>> streetsLookedFor,
-                                                                List<List<String>> streetsLookedThrough) {
-        List<Pair<Integer, Integer>> matchingTuples = new ArrayList<>();
+    private List<IntTuple> getStreetIntersections(List<List<String>> streetsLookedFor,
+                                                  List<List<String>> streetsLookedThrough) {
+        List<IntTuple> matchingTuples = new ArrayList<>();
         for (int sourceIterator = 0; sourceIterator < streetsLookedFor.size(); sourceIterator++) {
             for (String unarySourceStreet : streetsLookedFor.get(sourceIterator)) {
                 for (int targetIterator = 0; targetIterator < streetsLookedThrough.size(); targetIterator++) {
                     for (String unaryTargetStreet : streetsLookedThrough.get(targetIterator)) {
                         if (unarySourceStreet.equals(unaryTargetStreet)) {
-                            matchingTuples.add(new Pair<>(sourceIterator, targetIterator));
+                            matchingTuples.add(new IntTuple(sourceIterator, targetIterator));
                         }
                     }
                 }
@@ -87,16 +89,16 @@ public class DataParser {
      * @param numbersLookedThrough Requires further processing, as contrary to getStreetIntersections.
      * @return Acts similar to getStreetIntersections.
      */
-    private List<Pair<Integer, Integer>> getNumberIntersections(List<List<String>> numbersLookedFor,
-                                                                List<List<String>> numbersLookedThrough) {
-        List<Pair<Integer, Integer>> matchingTuples = new ArrayList<>();
+    private List<IntTuple> getNumberIntersections(List<List<String>> numbersLookedFor,
+                                                  List<List<String>> numbersLookedThrough) {
+        List<IntTuple> matchingTuples = new ArrayList<>();
         for (int sourceIterator = 0; sourceIterator < numbersLookedFor.size(); sourceIterator++) {
             for (String unarySourceNumber : numbersLookedFor.get(sourceIterator)) {
                 for (int targetIterator = 0; targetIterator < numbersLookedThrough.size(); targetIterator++) {
                     NumbersProcessor numbersProcessor = new NumbersProcessor(numbersLookedThrough.get(targetIterator));
                     for (String unaryTargetNumber : numbersProcessor.getProcessed()) {
                         if (unarySourceNumber.equals(unaryTargetNumber)) {
-                            matchingTuples.add(new Pair<>(sourceIterator, targetIterator));
+                            matchingTuples.add(new IntTuple(sourceIterator, targetIterator));
                         }
                     }
                 }

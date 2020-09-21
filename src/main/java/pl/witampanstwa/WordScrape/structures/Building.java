@@ -1,4 +1,4 @@
-package pl.witampanstwa.wordscrape;
+package pl.witampanstwa.wordscrape.structures;
 
 import java.util.List;
 
