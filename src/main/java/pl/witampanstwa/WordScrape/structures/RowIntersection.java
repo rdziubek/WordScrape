@@ -1,19 +1,33 @@
 package pl.witampanstwa.wordscrape.structures;
 
-import pl.witampanstwa.wordscrape.structures.Building;
 
 public class RowIntersection {
     private final int sourceIndex;
     private final int targetIndex;
     private final Building sourceModel;
     private final Building targetModel;
-    private final boolean doubtRaised = false;
+    private final boolean isWeak;
+    private final boolean wasInDoubt;
 
-    public RowIntersection(int sourceIndex, int targetIndex, Building sourceModel, Building targetModel) {
+    /**
+     * @param sourceIndex
+     * @param targetIndex
+     * @param sourceModel
+     * @param targetModel
+     * @param isWeak      describes whether the street name match relied on the string-hamming /
+     *                    Levenshtein distance with a non-zero result.
+     * @param wasInDoubt  describes whether the record contained more than one street name, and/or the targetModel
+     *                    expanded numbers contained more than one occurrence of sourceModel's expanded numbers.
+     */
+    public RowIntersection(int sourceIndex, int targetIndex,
+                           Building sourceModel, Building targetModel,
+                           boolean isWeak, boolean wasInDoubt) {
         this.sourceIndex = sourceIndex;
         this.targetIndex = targetIndex;
         this.sourceModel = sourceModel;
         this.targetModel = targetModel;
+        this.isWeak = isWeak;
+        this.wasInDoubt = wasInDoubt;
     }
 
     public int getSourceIndex() {
@@ -32,7 +46,11 @@ public class RowIntersection {
         return targetModel;
     }
 
-    public boolean isDoubtRaised() {
-        return doubtRaised;
+    public boolean isWeak() {
+        return isWeak;
+    }
+
+    public boolean wasInDoubt() {
+        return wasInDoubt;
     }
 }

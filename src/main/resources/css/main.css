@@ -10,16 +10,11 @@ table {
     table-layout: fixed;
     box-sizing: border-box;
     border-spacing: 1em 0;
-
 }
 
 tbody * {
     overflow-x: auto;
     box-sizing: border-box;
-}
-
-tr * {
-    margin: 0 10em;
 }
 
 tr:hover td {
@@ -41,6 +36,10 @@ td {
     padding: .75em 0;
 }
 
-td * {
-    position: absolute;
+.matched_range {
+    background-color: #90EE90;
+}
+
+.weak_match {
+    color: rgba(0, 0, 0, 0.38);
 }
