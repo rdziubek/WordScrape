@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
 
 public class WordScrape {
     public static void main(String[] args) throws FileNotFoundException {
@@ -58,10 +59,13 @@ public class WordScrape {
      * @return full file URI
      */
     private static String getPathLike(String partOfFilename) throws FileNotFoundException {
+        final String OFFICE_LOCKED_FILE_PREFIX = "~$";
+
         File f = new File(System.getProperty("user.dir"));
         File[] matchingFiles = f.listFiles((dir, name) -> unidecode(name)
                 .toLowerCase()
-                .contains(unidecode(partOfFilename)));
+                .contains(unidecode(partOfFilename))
+                && !name.startsWith(OFFICE_LOCKED_FILE_PREFIX));
 
         if (matchingFiles != null) {
             for (File matchingFile : matchingFiles) {
