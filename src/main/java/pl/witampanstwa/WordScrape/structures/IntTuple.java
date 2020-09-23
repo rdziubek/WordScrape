@@ -1,19 +1,19 @@
 package pl.witampanstwa.wordscrape.structures;
 
 public class IntTuple {
-    private final int key;
-    private final int value;
+    private final int left;
+    private final int right;
 
-    public IntTuple(int key, int value) {
-        this.key = key;
-        this.value = value;
+    public IntTuple(int left, int right) {
+        this.left = left;
+        this.right = right;
     }
 
-    public int getKey() {
-        return key;
+    public int getLeft() {
+        return left;
     }
 
-    public int getValue() {
-        return value;
+    public int getRight() {
+        return right;
     }
 }

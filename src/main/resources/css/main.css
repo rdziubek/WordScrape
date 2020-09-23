@@ -37,5 +37,9 @@ td {
 }
 
 .matched_range {
-    background-color: #90ee90;
+    background-color: #90EE90;
+}
+
+.weak_match {
+    color: rgba(0, 0, 0, 0.38);
 }

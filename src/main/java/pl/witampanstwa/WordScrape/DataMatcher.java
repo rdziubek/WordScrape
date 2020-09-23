@@ -1,9 +1,10 @@
 package pl.witampanstwa.wordscrape;
 
 import pl.witampanstwa.wordscrape.structures.Building;
+import pl.witampanstwa.wordscrape.structures.IntTuple;
+import pl.witampanstwa.wordscrape.structures.Range;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -22,9 +23,9 @@ public class DataMatcher {
                     "|(\\d+[a-zA-Z]*)" +
                     "(?:[/\\\\]*\\d*)");
     private final Pattern REGEX_BUILDING_STREET =
-            Pattern.compile("([A-Z]\\w*)" +
-                    "[a-z \\t]*" +
-                    "(?:\\d+[a-zA-Z]*[/\\\\]*\\d*)");
+            Pattern.compile("((?:[137]-?go\\s*)?(?:\\d+ )?[A-Za-z]\\w*)" +
+                    "[ \\t]*" +
+                    "(?:\\d+[a-zA-Z]*)(?:[/\\\\]+\\d*)");
     private final Pattern REGEX_BUILDING_NUMBERS =
             Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2})[ ]?r[,.' ]?)" +
                     "|(?:(?:od|w|W) \\d{4})" +
@@ -34,6 +35,16 @@ public class DataMatcher {
                     "|(?:\\d{4}|\\d{2} ?r[,.' ]?)" +
                     "|(?:\\d{1,2}\\.\\d{1,2}\\.\\d{4})" +
                     "|(\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:abcd|abc|ab|a)?(?:[,a-d]*)?)");
+    private final Pattern REGEX_BUILDING_NUMBERS_STREET =
+            Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2})[ ]?r[,.' ]?)" +
+                    "|(?:(?:od|w|W) \\d{4})" +
+                    "|(?:[Ii]+\\.\\d{4})" +
+                    "|(?:\\d{4}|\\d{2} ?r[,.' ]?)" +
+                    "|(?:\\d{1,2}\\.\\d{1,2}\\.\\d{4})" +
+                    "|((?:[137]-?go\\s*)?(?:\\d+ )?[A-Za-z]\\w*)" +
+                    "\\s*" +
+                    "(?:\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:abcd|abc|ab|a)?(?:[,a-d]*)?)"
+            );
 
     public DataMatcher(List<String> source, List<String> target) {
         List<String> asciiSourceRows = source.stream()
@@ -54,9 +65,9 @@ public class DataMatcher {
                 .collect(Collectors.toList());
         asciiTargetBuildings = asciiTargetRows.stream()
                 .map(row -> new Building(
-                        findAll(REGEX_BUILDING_STREET, row, 1),
+                        findAll(REGEX_BUILDING_NUMBERS_STREET, row, 1),
                         findAll(REGEX_BUILDING_NUMBERS, row, 1),
-                        findAllMatchRanges(REGEX_BUILDING_STREET, row, 1),
+                        findAllMatchRanges(REGEX_BUILDING_NUMBERS_STREET, row, 1),
                         findAllMatchRanges(REGEX_BUILDING_NUMBERS, row, 1)))
                 .collect(Collectors.toList());
     }
@@ -90,8 +101,8 @@ public class DataMatcher {
      * @param group
      * @return
      */
-    private List<List<Integer>> findAllMatchRanges(Pattern regex, String string, int group) {
-        List<List<Integer>> matchRanges = new ArrayList<>();
+    private List<Range> findAllMatchRanges(Pattern regex, String string, int group) {
+        List<Range> matchRanges = new ArrayList<>();
         Matcher matcher = regex.matcher(string);
 
         while (matcher.find()) {
@@ -100,7 +111,7 @@ public class DataMatcher {
                 int matchStart = matcher.start(group);
                 int matchEnd = matchStart + match.replaceAll("[ ,.;:]", "").length();
 
-                matchRanges.add(new ArrayList<>(Arrays.asList(matchStart, matchEnd)));
+                matchRanges.add(new Range(new IntTuple(matchStart, matchEnd)));
             }
         }
         return matchRanges;

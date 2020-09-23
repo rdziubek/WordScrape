@@ -5,10 +5,10 @@ import java.util.List;
 public class Building {
     private final List<String> streets;
     private final List<String> numbers;
-    private final List<List<Integer>> streetMatchRanges;
-    private final List<List<Integer>> numberMatchRanges;
+    private final List<Range> streetMatchRanges;
+    private final List<Range> numberMatchRanges;
 
-    public Building(List<String> street, List<String> numbers, List<List<Integer>> streetMatchRanges, List<List<Integer>> numberMatchRanges) {
+    public Building(List<String> street, List<String> numbers, List<Range> streetMatchRanges, List<Range> numberMatchRanges) {
         this.streets = street;
         this.numbers = numbers;
         this.streetMatchRanges = streetMatchRanges;
@@ -23,11 +23,11 @@ public class Building {
         return numbers;
     }
 
-    public List<List<Integer>> getStreetMatchRanges() {
+    public List<Range> getStreetMatchRanges() {
         return streetMatchRanges;
     }
 
-    public List<List<Integer>> getNumberMatchRanges() {
+    public List<Range> getNumberMatchRanges() {
         return numberMatchRanges;
     }
 }

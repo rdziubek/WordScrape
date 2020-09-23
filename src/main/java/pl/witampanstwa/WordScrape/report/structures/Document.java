@@ -1,7 +1,6 @@
 package pl.witampanstwa.wordscrape.report.structures;
 
 import j2html.TagCreator;
-import j2html.tags.Text;
 import pl.witampanstwa.wordscrape.report.DocumentStyler;
 import pl.witampanstwa.wordscrape.report.ResourceFetcher;
 import pl.witampanstwa.wordscrape.structures.RowIntersection;
@@ -45,25 +44,29 @@ public class Document {
                                                                 intersection.getSourceModel()
                                                                         .getNumberMatchRanges()
                                                                         .get(0)
-                                                                        .get(0),
+                                                                        .getBoundary().getLeft(),
                                                                 intersection.getSourceModel()
                                                                         .getNumberMatchRanges()
                                                                         .get(intersection.getSourceModel()
                                                                                 .getNumberMatchRanges()
                                                                                 .size() - 1)
-                                                                        .get(1)
+                                                                        .getBoundary().getRight(),
+                                                                intersection.isWeak(),
+                                                                intersection.wasInDoubt()
                                                         ).getStyledContent(), td(new DocumentStyler(
                                                                 targetRows.get(intersection.getTargetIndex()),
                                                                 intersection.getTargetModel()
                                                                         .getNumberMatchRanges()
                                                                         .get(0)
-                                                                        .get(0),
+                                                                        .getBoundary().getLeft(),
                                                                 intersection.getTargetModel()
                                                                         .getNumberMatchRanges()
                                                                         .get(intersection.getTargetModel()
                                                                                 .getNumberMatchRanges()
                                                                                 .size() - 1)
-                                                                        .get(1)
+                                                                        .getBoundary().getRight(),
+                                                                intersection.isWeak(),
+                                                                intersection.wasInDoubt()
                                                         ).getStyledContent())))
                                                 )
                                         )
