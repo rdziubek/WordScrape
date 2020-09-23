@@ -1,6 +1,5 @@
 package pl.witampanstwa.wordscrape;
 
-import org.apache.commons.text.similarity.HammingDistance;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import pl.witampanstwa.wordscrape.structures.Building;
 import pl.witampanstwa.wordscrape.structures.IntTuple;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
  * Intersection properties are loaded on the fly as the base logic / object initialisation is evaluated.
  */
 public class DataParser {
-    private static final int STREET_INTERSECTION_TOLERANCE = 4;
+    private static final int STREET_INTERSECTION_TOLERANCE_PERCENT = 50;
 
     final List<RowIntersection> intersections = new ArrayList<>();
     final List<IntTuple> intersectedStreets;
@@ -88,12 +87,16 @@ public class DataParser {
             for (String unarySourceStreet : streetsLookedFor.get(sourceIterator)) {
                 for (int targetIterator = 0; targetIterator < streetsLookedThrough.size(); targetIterator++) {
                     for (String unaryTargetStreet : streetsLookedThrough.get(targetIterator)) {
-                        int levenshteinDistance = new LevenshteinDistance().apply(unarySourceStreet, unaryTargetStreet);
+                        int levenshteinDistance = new LevenshteinDistance().apply(
+                                unarySourceStreet.toLowerCase(), unaryTargetStreet.toLowerCase());
                         if (levenshteinDistance == 0) {
                             isIntersectionWeak.add(false);
                             matchingTuples.add(new IntTuple(sourceIterator, targetIterator));
                         } else if (levenshteinDistance > 0
-                                && levenshteinDistance <= STREET_INTERSECTION_TOLERANCE) {
+                                && levenshteinDistance <= calculateToleratedCharCountForStrings(
+                                unarySourceStreet,
+                                unaryTargetStreet
+                        )) {
                             isIntersectionWeak.add(true);
                             matchingTuples.add(new IntTuple(sourceIterator, targetIterator));
                         }
@@ -131,5 +134,26 @@ public class DataParser {
         }
 
         return matchingTuples;
+    }
+
+    /**
+     * Tolerance of 0% means max accuracy, 100% returns a positive match for every string combination.
+     * Uses Math.ceil at each point of rounding, so that it tends into less accuracy matching.
+     * <p>
+     * In relation to the strings' sum of lengths and the tolerance percentage,
+     * the manipulation represent the graph given:
+     * 100   0 1 1 2 2 3 3 4 4 5 5  6  6  7
+     * 75    0 1 1 2 2 3 3 3 3 4 4  5  5  6
+     * 66    0 1 1 2 2 2 2 3 3 4 4  4  4  5
+     * 50    0 1 1 1 1 2 2 2 2 3 3  3  3  4
+     * 25    0 1 1 1 1 1 1 1 1 2 2  2  2  2
+     * 0     0 0 0 0 0 0 0 0 0 0 0  0  0  0
+     * <p>
+     * 0 1 2 3 4 5 6 7 8 9 10 11 12 13
+     */
+    private int calculateToleratedCharCountForStrings(String left, String right) {
+        int ceilingAverage = (int) Math.ceil((double) (left.length() + right.length()) / 2);
+
+        return (int) Math.ceil(ceilingAverage * ((double) STREET_INTERSECTION_TOLERANCE_PERCENT / 100));
     }
 }
