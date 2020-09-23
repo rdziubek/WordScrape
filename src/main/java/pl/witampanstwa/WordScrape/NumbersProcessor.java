@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
  * Analyses and decomposes single entry's numbers/ranges, where 'entry' is one data row/record.
  */
 public class NumbersProcessor {
-    private final List<String> processed;
+    private final List<List<String>> processed;
 
     public NumbersProcessor(List<String> numbers) {
         this.processed = process(numbers);
     }
 
-    public List<String> getProcessed() {
+    public List<List<String>> getProcessed() {
         return processed;
     }
 
@@ -28,11 +28,12 @@ public class NumbersProcessor {
      * @param numbers building's number/numbers
      * @return expanded numbers
      */
-    private List<String> process(List<String> numbers) {
-        List<String> exactNumbers = new ArrayList<>();
+    private List<List<String>> process(List<String> numbers) {
+        List<List<String>> exactNumbers = new ArrayList<>();
         StringBuilder unaryRange = new StringBuilder();
 
         for (int currentAtomIndex = 0; currentAtomIndex < numbers.size(); currentAtomIndex++) {
+            List<String> exactRanges = new ArrayList<>();
             String currentAtom = numbers.get(currentAtomIndex);
             String previousAtom = (currentAtomIndex > 0 ? numbers.get(currentAtomIndex - 1) : null);
 
@@ -40,12 +41,13 @@ public class NumbersProcessor {
                 unaryRange.append(currentAtom);
 
                 if (!currentAtom.endsWith("-")) {
-                    exactNumbers.addAll(decomposeRangeIntoExacts(unaryRange.toString()));
+                    exactRanges.addAll(decomposeRangeIntoExacts(unaryRange.toString()));
                     unaryRange = new StringBuilder();
                 }
             } else {
-                exactNumbers.add(currentAtom);
+                exactRanges.add(currentAtom);
             }
+            exactNumbers.add(exactRanges);
         }
 
         return exactNumbers;

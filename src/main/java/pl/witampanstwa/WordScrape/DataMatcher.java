@@ -3,6 +3,7 @@ package pl.witampanstwa.wordscrape;
 import pl.witampanstwa.wordscrape.structures.Building;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -47,12 +48,16 @@ public class DataMatcher {
         asciiSourceBuildings = asciiSourceRows.stream()
                 .map(row -> new Building(
                         findAll(REGEX_BUILDING_STREET, row, 1),
-                        findAll(REGEX_BUILDING_NUMBER, row, 1)))
+                        findAll(REGEX_BUILDING_NUMBER, row, 1),
+                        findAllMatchRanges(REGEX_BUILDING_STREET, row, 1),
+                        findAllMatchRanges(REGEX_BUILDING_NUMBER, row, 1)))
                 .collect(Collectors.toList());
         asciiTargetBuildings = asciiTargetRows.stream()
                 .map(row -> new Building(
                         findAll(REGEX_BUILDING_STREET, row, 1),
-                        findAll(REGEX_BUILDING_NUMBERS, row, 1)))
+                        findAll(REGEX_BUILDING_NUMBERS, row, 1),
+                        findAllMatchRanges(REGEX_BUILDING_STREET, row, 1),
+                        findAllMatchRanges(REGEX_BUILDING_NUMBERS, row, 1)))
                 .collect(Collectors.toList());
     }
 
@@ -75,6 +80,30 @@ public class DataMatcher {
             }
         }
         return matches;
+    }
+
+    /**
+     * Match end needs be matched based on the truncated atom length.
+     *
+     * @param regex
+     * @param string
+     * @param group
+     * @return
+     */
+    private List<List<Integer>> findAllMatchRanges(Pattern regex, String string, int group) {
+        List<List<Integer>> matchRanges = new ArrayList<>();
+        Matcher matcher = regex.matcher(string);
+
+        while (matcher.find()) {
+            String match = matcher.group(group);
+            if (match != null) {
+                int matchStart = matcher.start(group);
+                int matchEnd = matchStart + match.replaceAll("[ ,.;:]", "").length();
+
+                matchRanges.add(new ArrayList<>(Arrays.asList(matchStart, matchEnd)));
+            }
+        }
+        return matchRanges;
     }
 
     private String unidecode(String string) {

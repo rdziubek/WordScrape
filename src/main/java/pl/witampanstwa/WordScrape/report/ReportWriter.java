@@ -12,9 +12,12 @@ import java.util.List;
 public class ReportWriter {
     private static final String fileName = "Report.html";
 
-    public ReportWriter(List<RowIntersection> intersections, List<String> sourceRows, List<String> targetRows)
+    public ReportWriter(List<RowIntersection> intersections,
+                        List<String> sourceRows, List<String> targetRows)
             throws IOException {
-        bufferedWrite(new Document(intersections, sourceRows, targetRows).getDocument());
+        bufferedWrite(new Document(
+                intersections,
+                sourceRows, targetRows).getDocument());
     }
 
     public void bufferedWrite(String document)

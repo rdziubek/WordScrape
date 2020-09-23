@@ -5,6 +5,7 @@ import pl.witampanstwa.wordscrape.structures.IntTuple;
 import pl.witampanstwa.wordscrape.structures.RowIntersection;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,9 +97,11 @@ public class DataParser {
             for (String unarySourceNumber : numbersLookedFor.get(sourceIterator)) {
                 for (int targetIterator = 0; targetIterator < numbersLookedThrough.size(); targetIterator++) {
                     NumbersProcessor numbersProcessor = new NumbersProcessor(numbersLookedThrough.get(targetIterator));
-                    for (String unaryTargetNumber : numbersProcessor.getProcessed()) {
-                        if (unarySourceNumber.equals(unaryTargetNumber)) {
-                            matchingTuples.add(new IntTuple(sourceIterator, targetIterator));
+                    for (int rangeIterator = 0; rangeIterator < numbersProcessor.getProcessed().size(); rangeIterator++) {
+                        for (String unaryTargetNumber : numbersProcessor.getProcessed().get(rangeIterator)) {
+                            if (unarySourceNumber.equals(unaryTargetNumber)) {
+                                matchingTuples.add(new IntTuple(sourceIterator, targetIterator));
+                            }
                         }
                     }
                 }
