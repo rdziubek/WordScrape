@@ -1,13 +1,25 @@
 package pl.witampanstwa.wordscrape.structures;
 
 public class Range {
-    private final IntTuple boundary;
+    private final IntTuple boundaryIndices;
+    private final StringTuple boundaryValues;
 
-    public Range(IntTuple boundary) {
-        this.boundary = boundary;
+    public Range(IntTuple boundaryIndices) {
+        this.boundaryIndices = boundaryIndices;
+        this.boundaryValues = null;
+
     }
 
-    public IntTuple getBoundary() {
-        return boundary;
+    public Range(StringTuple boundaryValues) {
+        this.boundaryIndices = null;
+        this.boundaryValues = boundaryValues;
+    }
+
+    public IntTuple getBoundaryIndices() {
+        return boundaryIndices;
+    }
+
+    public StringTuple getBoundaryValues() {
+        return boundaryValues;
     }
 }

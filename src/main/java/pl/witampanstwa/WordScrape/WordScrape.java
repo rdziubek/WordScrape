@@ -2,6 +2,7 @@ package pl.witampanstwa.wordscrape;
 
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import pl.witampanstwa.wordscrape.report.ReportWriter;
+import pl.witampanstwa.wordscrape.structures.Range;
 import pl.witampanstwa.wordscrape.structures.RowIntersection;
 
 import java.io.File;
@@ -29,7 +30,8 @@ public class WordScrape {
         DataMatcher dataMatcher = new DataMatcher(rowsLookedFor, rowsLookedThrough);
         DataParser dataParser = new DataParser(
                 dataMatcher.getAsciiBuildingsLookedFor(),
-                dataMatcher.getAsciiBuildingsLookedThrough());
+                dataMatcher.getAsciiBuildingsLookedThrough()
+        );
 
         for (RowIntersection intersection : dataParser.getIntersections()) {
             System.out.println();
@@ -44,8 +46,13 @@ public class WordScrape {
         }
 
         try {
+            List<Range> rowIntersectionsAtNumberRanges = new ValueToIndexMapper(
+                    dataParser.getUnaryIntersectedNumberRanges(),
+                    dataParser.getIntersections(),
+                    rowsLookedThrough).getAbsoluteRangeBoundaries();
+
             ReportWriter reportWriter = new ReportWriter(dataParser.getIntersections(),
-                    rowsLookedFor, rowsLookedThrough);
+                    rowsLookedFor, rowsLookedThrough, rowIntersectionsAtNumberRanges);
         } catch (IOException e) {
             System.out.println("Cannot write to filesystem. " + e);
         }

@@ -3,6 +3,7 @@ package pl.witampanstwa.wordscrape.report.structures;
 import j2html.TagCreator;
 import pl.witampanstwa.wordscrape.report.DocumentStyler;
 import pl.witampanstwa.wordscrape.report.ResourceFetcher;
+import pl.witampanstwa.wordscrape.structures.Range;
 import pl.witampanstwa.wordscrape.structures.RowIntersection;
 
 import java.util.List;
@@ -13,10 +14,13 @@ public class Document {
     private final String document;
 
     public Document(List<RowIntersection> intersections,
-                    List<String> sourceRows, List<String> targetRows) {
+                    List<String> sourceRows, List<String> targetRows,
+                    List<Range> rowIntersectionsAtNumberRanges) {
+
         this.document = generateDocument(
                 intersections,
-                sourceRows, targetRows);
+                sourceRows, targetRows,
+                rowIntersectionsAtNumberRanges);
     }
 
     public String getDocument() {
@@ -24,7 +28,13 @@ public class Document {
     }
 
     private String generateDocument(List<RowIntersection> intersections,
-                                    List<String> sourceRows, List<String> targetRows) {
+                                    List<String> sourceRows, List<String> targetRows,
+                                    List<Range> rowIntersectionsAtNumberRanges) {
+        // TODO: Refactor dynamic allocation into static.
+        for (int i = 0; i < intersections.size(); i++) {
+            intersections.get(i).setUnaryIntersectedNumberRanges(rowIntersectionsAtNumberRanges.get(i));
+        }
+
         return document(
                 html(
                         head(
@@ -44,27 +54,21 @@ public class Document {
                                                                 intersection.getModelLookedFor()
                                                                         .getNumberMatchRanges()
                                                                         .get(0)
-                                                                        .getBoundary().getLeft(),
+                                                                        .getBoundaryIndices().getLeft(),
                                                                 intersection.getModelLookedFor()
                                                                         .getNumberMatchRanges()
                                                                         .get(intersection.getModelLookedFor()
                                                                                 .getNumberMatchRanges()
                                                                                 .size() - 1)
-                                                                        .getBoundary().getRight(),
+                                                                        .getBoundaryIndices().getRight(),
                                                                 intersection.isWeak(),
                                                                 intersection.wasInDoubt()
                                                         ).getStyledContent(), td(new DocumentStyler(
                                                                 targetRows.get(intersection.getIndexItemLookedThrough()),
-                                                                intersection.getModelLookedThrough()
-                                                                        .getNumberMatchRanges()
-                                                                        .get(0)
-                                                                        .getBoundary().getLeft(),
-                                                                intersection.getModelLookedThrough()
-                                                                        .getNumberMatchRanges()
-                                                                        .get(intersection.getModelLookedThrough()
-                                                                                .getNumberMatchRanges()
-                                                                                .size() - 1)
-                                                                        .getBoundary().getRight(),
+                                                                intersection.getUnaryIntersectedNumberRanges()
+                                                                        .getBoundaryIndices().getLeft(),
+                                                                intersection.getUnaryIntersectedNumberRanges()
+                                                                        .getBoundaryIndices().getRight(),
                                                                 intersection.isWeak(),
                                                                 intersection.wasInDoubt()
                                                         ).getStyledContent())))

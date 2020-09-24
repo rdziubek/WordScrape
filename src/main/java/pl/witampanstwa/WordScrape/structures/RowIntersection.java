@@ -6,6 +6,7 @@ public class RowIntersection {
     private final int indexItemLookedThrough;
     private final Building modelLookedFor;
     private final Building modelLookedThrough;
+    private Range unaryIntersectedNumberRanges;
     private final boolean isWeak;
     private final boolean wasInDoubt;
 
@@ -14,18 +15,20 @@ public class RowIntersection {
      * @param indexItemLookedThrough
      * @param modelLookedFor
      * @param modelLookedThrough
-     * @param isWeak      describes whether the street name match relied on the string-hamming /
-     *                    Levenshtein distance with a non-zero result.
-     * @param wasInDoubt  describes whether the record contained more than one street name, and/or the targetModel
-     *                    expanded numbers contained more than one occurrence of sourceModel's expanded numbers.
+     * @param isWeak                 describes whether the street name match relied on the string-hamming /
+     *                               Levenshtein distance with a non-zero result.
+     * @param wasInDoubt             describes whether the record contained more than one street name, and/or the targetModel
+     *                               expanded numbers contained more than one occurrence of sourceModel's expanded numbers.
      */
     public RowIntersection(int indexItemLookedFor, int indexItemLookedThrough,
                            Building modelLookedFor, Building modelLookedThrough,
+                           Range unaryIntersectedNumberRanges,
                            boolean isWeak, boolean wasInDoubt) {
         this.indexItemLookedFor = indexItemLookedFor;
         this.indexItemLookedThrough = indexItemLookedThrough;
         this.modelLookedFor = modelLookedFor;
         this.modelLookedThrough = modelLookedThrough;
+        this.unaryIntersectedNumberRanges = unaryIntersectedNumberRanges;
         this.isWeak = isWeak;
         this.wasInDoubt = wasInDoubt;
     }
@@ -44,6 +47,14 @@ public class RowIntersection {
 
     public Building getModelLookedThrough() {
         return modelLookedThrough;
+    }
+
+    public Range getUnaryIntersectedNumberRanges() {
+        return unaryIntersectedNumberRanges;
+    }
+
+    public void setUnaryIntersectedNumberRanges(Range unaryIntersectedNumberRanges) {
+        this.unaryIntersectedNumberRanges = unaryIntersectedNumberRanges;
     }
 
     public boolean isWeak() {

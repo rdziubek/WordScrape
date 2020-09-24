@@ -1,9 +1,7 @@
 package pl.witampanstwa.wordscrape;
 
 import org.apache.commons.text.similarity.LevenshteinDistance;
-import pl.witampanstwa.wordscrape.structures.Building;
-import pl.witampanstwa.wordscrape.structures.IntTuple;
-import pl.witampanstwa.wordscrape.structures.RowIntersection;
+import pl.witampanstwa.wordscrape.structures.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +18,8 @@ public class DataParser {
     final List<RowIntersection> intersections = new ArrayList<>();
     final List<IntTuple> intersectedStreets;
     final List<IntTuple> intersectedNumbers;
+    final List<Range> unaryPartiallyIntersectedNumberRanges = new ArrayList<>();
+    final List<Range> unaryIntersectedNumberRanges = new ArrayList<>();
     final List<Boolean> isIntersectionWeak = new ArrayList<>();
     final List<Boolean> wasIntersectionInDoubt = new ArrayList<>();
 
@@ -59,7 +59,11 @@ public class DataParser {
                             new RowIntersection(sourceIntersectionIndex, targetIntersectionIndex,
                                     itemsLookedFor.get(sourceIntersectionIndex),
                                     itemsLookedThrough.get(targetIntersectionIndex),
+                                    new Range(new IntTuple(0, 0)),
                                     isWeak, wasInDoubt));
+                    unaryIntersectedNumberRanges.add(
+                            unaryPartiallyIntersectedNumberRanges.get(numberIntersectionCounter)
+                    );
                 }
                 numberIntersectionCounter++;
             }
@@ -69,6 +73,10 @@ public class DataParser {
 
     public List<RowIntersection> getIntersections() {
         return intersections;
+    }
+
+    public List<Range> getUnaryIntersectedNumberRanges() {
+        return unaryIntersectedNumberRanges;
     }
 
     /**
@@ -83,22 +91,20 @@ public class DataParser {
     private List<IntTuple> getStreetIntersections(List<List<String>> streetsLookedFor,
                                                   List<List<String>> streetsLookedThrough) {
         List<IntTuple> matchingTuples = new ArrayList<>();
-        for (int sourceIterator = 0; sourceIterator < streetsLookedFor.size(); sourceIterator++) {
-            for (String unarySourceStreet : streetsLookedFor.get(sourceIterator)) {
-                for (int targetIterator = 0; targetIterator < streetsLookedThrough.size(); targetIterator++) {
-                    for (String unaryTargetStreet : streetsLookedThrough.get(targetIterator)) {
+        for (int lookedForIterator = 0; lookedForIterator < streetsLookedFor.size(); lookedForIterator++) {
+            for (String unaryStreetLookedFor : streetsLookedFor.get(lookedForIterator)) {
+                for (int lookedThroughIterator = 0; lookedThroughIterator < streetsLookedThrough.size(); lookedThroughIterator++) {
+                    for (String unaryStreetLookedThrough : streetsLookedThrough.get(lookedThroughIterator)) {
                         int levenshteinDistance = new LevenshteinDistance().apply(
-                                unarySourceStreet.toLowerCase(), unaryTargetStreet.toLowerCase());
+                                unaryStreetLookedFor.toLowerCase(), unaryStreetLookedThrough.toLowerCase());
                         if (levenshteinDistance == 0) {
                             isIntersectionWeak.add(false);
-                            matchingTuples.add(new IntTuple(sourceIterator, targetIterator));
+                            matchingTuples.add(new IntTuple(lookedForIterator, lookedThroughIterator));
                         } else if (levenshteinDistance > 0
                                 && levenshteinDistance <= calculateToleratedCharCountForStrings(
-                                unarySourceStreet,
-                                unaryTargetStreet
-                        )) {
+                                unaryStreetLookedFor, unaryStreetLookedThrough)) {
                             isIntersectionWeak.add(true);
-                            matchingTuples.add(new IntTuple(sourceIterator, targetIterator));
+                            matchingTuples.add(new IntTuple(lookedForIterator, lookedThroughIterator));
                         }
                     }
                 }
@@ -118,19 +124,31 @@ public class DataParser {
     private List<IntTuple> getNumberIntersections(List<List<String>> numbersLookedFor,
                                                   List<List<String>> numbersLookedThrough) {
         List<IntTuple> matchingTuples = new ArrayList<>();
-        for (int sourceIterator = 0; sourceIterator < numbersLookedFor.size(); sourceIterator++) {
-            for (String unarySourceNumber : numbersLookedFor.get(sourceIterator)) {
-                for (int targetIterator = 0; targetIterator < numbersLookedThrough.size(); targetIterator++) {
-                    NumbersProcessor numbersProcessor = new NumbersProcessor(numbersLookedThrough.get(targetIterator));
-                    for (int rangeIterator = 0; rangeIterator < numbersProcessor.getProcessed().size(); rangeIterator++) {
-                        for (String unaryTargetNumber : numbersProcessor.getProcessed().get(rangeIterator)) {
-                            if (unarySourceNumber.equals(unaryTargetNumber)) {
-                                matchingTuples.add(new IntTuple(sourceIterator, targetIterator));
+        int lookedForIterator = 0;
+        for (List<String> unaryNumbersLookedFor : numbersLookedFor) {
+            for (String unaryNumberLookedFor : unaryNumbersLookedFor) {
+                int lookedThroughIterator = 0;
+                for (List<String> unaryNumbersLookedThrough : numbersLookedThrough) {
+                    List<List<String>> unaryRanges = new NumbersProcessor(unaryNumbersLookedThrough).getProcessed();
+                    int unaryRangeCounter = 0;
+                    for (List<String> unaryRange : unaryRanges) {
+                        for (String unaryTargetNumber : unaryRange) {
+                            if (unaryNumberLookedFor.equals(unaryTargetNumber)) {
+                                matchingTuples.add(new IntTuple(lookedForIterator, lookedThroughIterator));
+                                unaryPartiallyIntersectedNumberRanges.add(new Range(new StringTuple(
+                                        unaryRanges.get(unaryRangeCounter)
+                                                .get(0),
+                                        unaryRanges.get(unaryRangeCounter)
+                                                .get(unaryRanges.get(unaryRangeCounter).size() - 1)
+                                )));
                             }
                         }
+                        unaryRangeCounter++;
                     }
+                    lookedThroughIterator++;
                 }
             }
+            lookedForIterator++;
         }
 
         return matchingTuples;

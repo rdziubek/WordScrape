@@ -94,6 +94,7 @@ public class DataMatcher {
     }
 
     /**
+     * Returns each atom's left (start) and right (end) match boundaries.
      * Match end needs be matched based on the truncated atom length.
      *
      * @param regex
