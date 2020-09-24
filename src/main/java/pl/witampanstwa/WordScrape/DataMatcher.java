@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
  * Produces ready lists of `Buildings`, provided according row records as input
  */
 public class DataMatcher {
-    private final List<Building> asciiSourceBuildings;
-    private final List<Building> asciiTargetBuildings;
+    private final List<Building> asciiBuildingsLookedFor;
+    private final List<Building> asciiBuildingsLookedThrough;
     private final Pattern REGEX_BUILDING_NUMBER =
             Pattern.compile("(?:^\\d+[.,]?)" +
                     "|(?:\\d{2,9}[,.]?\\d*\\s*m\\s*2?)" +
@@ -56,14 +56,14 @@ public class DataMatcher {
                 .map(this::unidecode)
                 .collect(Collectors.toList());
 
-        asciiSourceBuildings = asciiSourceRows.stream()
+        asciiBuildingsLookedFor = asciiSourceRows.stream()
                 .map(row -> new Building(
                         findAll(REGEX_BUILDING_STREET, row, 1),
                         findAll(REGEX_BUILDING_NUMBER, row, 1),
                         findAllMatchRanges(REGEX_BUILDING_STREET, row, 1),
                         findAllMatchRanges(REGEX_BUILDING_NUMBER, row, 1)))
                 .collect(Collectors.toList());
-        asciiTargetBuildings = asciiTargetRows.stream()
+        asciiBuildingsLookedThrough = asciiTargetRows.stream()
                 .map(row -> new Building(
                         findAll(REGEX_BUILDING_NUMBERS_STREET, row, 1),
                         findAll(REGEX_BUILDING_NUMBERS, row, 1),
@@ -72,12 +72,12 @@ public class DataMatcher {
                 .collect(Collectors.toList());
     }
 
-    public List<Building> getAsciiSourceBuildings() {
-        return asciiSourceBuildings;
+    public List<Building> getAsciiBuildingsLookedFor() {
+        return asciiBuildingsLookedFor;
     }
 
-    public List<Building> getAsciiTargetBuildings() {
-        return asciiTargetBuildings;
+    public List<Building> getAsciiBuildingsLookedThrough() {
+        return asciiBuildingsLookedThrough;
     }
 
     private List<String> findAll(Pattern regex, String string, int group) {

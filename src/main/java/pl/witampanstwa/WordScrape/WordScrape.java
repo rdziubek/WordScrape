@@ -9,44 +9,43 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
 
 public class WordScrape {
     public static void main(String[] args) throws FileNotFoundException {
-        final String sourceFilePath = getPathLike("zleceni");
-        final String targetFilePath = getPathLike("inwent");
-        final List<String> sourceRows = new ArrayList<>();
-        final List<String> targetRows = new ArrayList<>();
+        final String filePathItemsLookedFor = getPathLike("zleceni");
+        final String filePathItemsLookedThrough = getPathLike("inwent");
+        final List<String> rowsLookedFor = new ArrayList<>();
+        final List<String> rowsLookedThrough = new ArrayList<>();
 
         try {
-            sourceRows.addAll(new Scraper(sourceFilePath)
+            rowsLookedFor.addAll(new Scraper(filePathItemsLookedFor)
                     .getTableRows());
-            targetRows.addAll(new Scraper(targetFilePath)
+            rowsLookedThrough.addAll(new Scraper(filePathItemsLookedThrough)
                     .getTableRows());
         } catch (OfficeXmlFileException | IOException e) {
             System.out.println("Error while fetching file/files form the filesystem. " + e);
         }
 
-        DataMatcher dataMatcher = new DataMatcher(sourceRows, targetRows);
+        DataMatcher dataMatcher = new DataMatcher(rowsLookedFor, rowsLookedThrough);
         DataParser dataParser = new DataParser(
-                dataMatcher.getAsciiSourceBuildings(),
-                dataMatcher.getAsciiTargetBuildings());
+                dataMatcher.getAsciiBuildingsLookedFor(),
+                dataMatcher.getAsciiBuildingsLookedThrough());
 
         for (RowIntersection intersection : dataParser.getIntersections()) {
             System.out.println();
-            System.out.println("Source index: " + intersection.getSourceIndex());
-            System.out.println("Target index: " + intersection.getTargetIndex());
-            System.out.println("Source row: " + sourceRows.get(intersection.getSourceIndex()));
-            System.out.println("Source model: " + intersection.getSourceModel().getStreets() + " "
-                    + intersection.getSourceModel().getNumbers());
-            System.out.println("Target row: " + targetRows.get(intersection.getTargetIndex()));
-            System.out.println("Target model: " + intersection.getTargetModel().getStreets() + " "
-                    + intersection.getTargetModel().getNumbers());
+            System.out.println("Source index: " + intersection.getIndexItemLookedFor());
+            System.out.println("Target index: " + intersection.getIndexItemLookedThrough());
+            System.out.println("Source row: " + rowsLookedFor.get(intersection.getIndexItemLookedFor()));
+            System.out.println("Source model: " + intersection.getModelLookedFor().getStreets() + " "
+                    + intersection.getModelLookedFor().getNumbers());
+            System.out.println("Target row: " + rowsLookedThrough.get(intersection.getIndexItemLookedThrough()));
+            System.out.println("Target model: " + intersection.getModelLookedThrough().getStreets() + " "
+                    + intersection.getModelLookedThrough().getNumbers());
         }
 
         try {
             ReportWriter reportWriter = new ReportWriter(dataParser.getIntersections(),
-                    sourceRows, targetRows);
+                    rowsLookedFor, rowsLookedThrough);
         } catch (IOException e) {
             System.out.println("Cannot write to filesystem. " + e);
         }
