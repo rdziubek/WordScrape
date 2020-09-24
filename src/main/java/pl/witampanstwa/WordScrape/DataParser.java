@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * Intersection properties are loaded on the fly as the base logic / object initialisation is evaluated.
  */
 public class DataParser {
-    private static final int STREET_INTERSECTION_TOLERANCE_PERCENT = 34;
+    private static final int STREET_INTERSECTION_TOLERANCE_PERCENT = 20;
 
     final List<RowIntersection> intersections = new ArrayList<>();
     final List<IntTuple> intersectedStreets;
