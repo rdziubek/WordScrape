@@ -40,28 +40,28 @@ public class Document {
                                                         th("Przeszukiwane")
                                                 ),
                                                 each(intersections, intersection -> tr(td(new DocumentStyler(
-                                                                sourceRows.get(intersection.getSourceIndex()),
-                                                                intersection.getSourceModel()
+                                                                sourceRows.get(intersection.getIndexItemLookedFor()),
+                                                                intersection.getModelLookedFor()
                                                                         .getNumberMatchRanges()
                                                                         .get(0)
                                                                         .getBoundary().getLeft(),
-                                                                intersection.getSourceModel()
+                                                                intersection.getModelLookedFor()
                                                                         .getNumberMatchRanges()
-                                                                        .get(intersection.getSourceModel()
+                                                                        .get(intersection.getModelLookedFor()
                                                                                 .getNumberMatchRanges()
                                                                                 .size() - 1)
                                                                         .getBoundary().getRight(),
                                                                 intersection.isWeak(),
                                                                 intersection.wasInDoubt()
                                                         ).getStyledContent(), td(new DocumentStyler(
-                                                                targetRows.get(intersection.getTargetIndex()),
-                                                                intersection.getTargetModel()
+                                                                targetRows.get(intersection.getIndexItemLookedThrough()),
+                                                                intersection.getModelLookedThrough()
                                                                         .getNumberMatchRanges()
                                                                         .get(0)
                                                                         .getBoundary().getLeft(),
-                                                                intersection.getTargetModel()
+                                                                intersection.getModelLookedThrough()
                                                                         .getNumberMatchRanges()
-                                                                        .get(intersection.getTargetModel()
+                                                                        .get(intersection.getModelLookedThrough()
                                                                                 .getNumberMatchRanges()
                                                                                 .size() - 1)
                                                                         .getBoundary().getRight(),
