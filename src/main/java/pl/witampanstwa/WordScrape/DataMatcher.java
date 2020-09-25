@@ -18,8 +18,8 @@ public class DataMatcher {
     private final List<Building> asciiBuildingsLookedFor;
     private final List<Building> asciiBuildingsLookedThrough;
     private final Pattern REGEX_BUILDING_NUMBER =
-            Pattern.compile("(?:^\\d+[.,]?)" +
-                    "|(?:\\d{2,9}[,.]?\\d*\\s*m\\s*2?)" +
+            Pattern.compile("(?:^ ?\\d+[.,]?(?:\\d*))" +
+                    "|(?:(?:\\d+[.])?\\d{2,9}[,.]?\\d*\\s*m\\s*2?)" +
                     "|(\\d+[a-zA-Z]*)" +
                     "(?:[/\\\\]*\\d*)");
     private final Pattern REGEX_BUILDING_STREET =
@@ -27,7 +27,7 @@ public class DataMatcher {
                     "[ \\t]*" +
                     "(?:\\d+[a-zA-Z]*)(?:[/\\\\]+\\d*)");
     private final Pattern REGEX_BUILDING_NUMBERS =
-            Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2})[ ]?r[,.' ]?)" +
+            Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2}) ?r[,.' ]?)" +
                     "|(?:(?:od|w|W) \\d{4})" +
                     "|(?:\\d+ [A-Z][A-Za-z]+)" +
                     "|(?:[137]-?go)" +
@@ -36,7 +36,7 @@ public class DataMatcher {
                     "|(?:\\d{1,2}\\.\\d{1,2}\\.\\d{4})" +
                     "|(\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:abcd|abc|ab|a)?(?:[,a-d]*)?)");
     private final Pattern REGEX_BUILDING_NUMBERS_STREET =
-            Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2})[ ]?r[,.' ]?)" +
+            Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2}) ?r[,.' ]?)" +
                     "|(?:(?:od|w|W) \\d{4})" +
                     "|(?:[Ii]+\\.\\d{4})" +
                     "|(?:\\d{4}|\\d{2} ?r[,.' ]?)" +
