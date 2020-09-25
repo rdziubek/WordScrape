@@ -34,7 +34,7 @@ public class DataMatcher {
                     "|(?:[Ii]+\\.\\d{4})" +
                     "|(?:\\d{4}|\\d{2} ?r[,.' ]?)" +
                     "|(?:\\d{1,2}\\.\\d{1,2}\\.\\d{4})" +
-                    "|(\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:abcd|abc|ab|a)?(?:[,a-d]*)?)");
+                    "|(\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:[abcd]{1,4})?[ \\t]?(?:[,a-d]*)?)");
     private final Pattern REGEX_BUILDING_NUMBERS_STREET =
             Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2}) ?r[,.' ]?)" +
                     "|(?:(?:od|w|W) \\d{4})" +
@@ -43,7 +43,7 @@ public class DataMatcher {
                     "|(?:\\d{1,2}\\.\\d{1,2}\\.\\d{4})" +
                     "|((?:[137]-?go\\s*)?(?:\\d+ )?[A-Za-z]\\w*)" +
                     "\\s*" +
-                    "(?:\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:abcd|abc|ab|a)?(?:[,a-d]*)?)"
+                    "(?:\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:[abcd]{1,4})?[ \\t]?(?:[,a-d]*)?)"
             );
 
     public DataMatcher(List<String> source, List<String> target) {
