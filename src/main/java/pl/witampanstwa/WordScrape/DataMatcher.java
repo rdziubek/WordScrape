@@ -18,8 +18,8 @@ public class DataMatcher {
     private final List<Building> asciiBuildingsLookedFor;
     private final List<Building> asciiBuildingsLookedThrough;
     private final Pattern REGEX_BUILDING_NUMBER =
-            Pattern.compile("(?:^\\d+[.,]?)" +
-                    "|(?:\\d{2,9}[,.]?\\d*\\s*m\\s*2?)" +
+            Pattern.compile("(?:^ ?\\d+[.,]?(?:\\d*))" +
+                    "|(?:(?:\\d+[.])?\\d{2,9}[,.]?\\d*\\s*m\\s*2?)" +
                     "|(\\d+[a-zA-Z]*)" +
                     "(?:[/\\\\]*\\d*)");
     private final Pattern REGEX_BUILDING_STREET =
@@ -27,23 +27,23 @@ public class DataMatcher {
                     "[ \\t]*" +
                     "(?:\\d+[a-zA-Z]*)(?:[/\\\\]+\\d*)");
     private final Pattern REGEX_BUILDING_NUMBERS =
-            Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2})[ ]?r[,.' ]?)" +
+            Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2}) ?r[,.' ]?)" +
                     "|(?:(?:od|w|W) \\d{4})" +
                     "|(?:\\d+ [A-Z][A-Za-z]+)" +
                     "|(?:[137]-?go)" +
                     "|(?:[Ii]+\\.\\d{4})" +
                     "|(?:\\d{4}|\\d{2} ?r[,.' ]?)" +
                     "|(?:\\d{1,2}\\.\\d{1,2}\\.\\d{4})" +
-                    "|(\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:abcd|abc|ab|a)?(?:[,a-d]*)?)");
+                    "|(\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:[abcd]{1,4})?[ \\t]?(?:[,a-d]*)?)");
     private final Pattern REGEX_BUILDING_NUMBERS_STREET =
-            Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2})[ ]?r[,.' ]?)" +
+            Pattern.compile("(?:\\d{1,2}[. ](?:\\d{4}|\\d{2}) ?r[,.' ]?)" +
                     "|(?:(?:od|w|W) \\d{4})" +
                     "|(?:[Ii]+\\.\\d{4})" +
                     "|(?:\\d{4}|\\d{2} ?r[,.' ]?)" +
                     "|(?:\\d{1,2}\\.\\d{1,2}\\.\\d{4})" +
                     "|((?:[137]-?go\\s*)?(?:\\d+ )?[A-Za-z]\\w*)" +
                     "\\s*" +
-                    "(?:\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:abcd|abc|ab|a)?(?:[,a-d]*)?)"
+                    "(?:\\d+[A-Za-z]*[-/]?[Ii]*\\s?(?:[abcd]{1,4})?[ \\t]?(?:[,a-d]*)?)"
             );
 
     public DataMatcher(List<String> source, List<String> target) {
