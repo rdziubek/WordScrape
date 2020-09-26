@@ -8,15 +8,15 @@ import java.util.List;
 public class Building {
     private final List<String> streets;
     private final List<String> numbers;
-    private final List<Range> streetMatchRanges;
-    private final List<Range> numberMatchRanges;
+    private final List<Boundary> streetMatchBoundaries;
+    private final List<Boundary> numberMatchBoundaries;
 
     public Building(List<String> street, List<String> numbers,
-                    List<Range> streetMatchRanges, List<Range> numberMatchRanges) {
+                    List<Boundary> streetMatchBoundaries, List<Boundary> numberMatchBoundaries) {
         this.streets = street;
         this.numbers = numbers;
-        this.streetMatchRanges = streetMatchRanges;
-        this.numberMatchRanges = numberMatchRanges;
+        this.streetMatchBoundaries = streetMatchBoundaries;
+        this.numberMatchBoundaries = numberMatchBoundaries;
     }
 
     public List<String> getStreets() {
@@ -27,11 +27,11 @@ public class Building {
         return numbers;
     }
 
-    public List<Range> getStreetMatchRanges() {
-        return streetMatchRanges;
+    public List<Boundary> getStreetMatchRanges() {
+        return streetMatchBoundaries;
     }
 
-    public List<Range> getNumberMatchRanges() {
-        return numberMatchRanges;
+    public List<Boundary> getNumberMatchRanges() {
+        return numberMatchBoundaries;
     }
 }

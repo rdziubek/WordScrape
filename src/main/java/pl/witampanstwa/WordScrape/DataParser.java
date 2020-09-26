@@ -18,8 +18,8 @@ public class DataParser {
     final List<RowIntersection> intersections = new ArrayList<>();
     final List<IntTuple> intersectedStreets;
     final List<IntTuple> intersectedNumbers;
-    final List<Range> unaryPartiallyIntersectedNumberRanges = new ArrayList<>();
-    final List<Range> unaryIntersectedNumberRanges = new ArrayList<>();
+    final List<Boundary> unaryPartiallyIntersectedNumberRanges = new ArrayList<>();
+    final List<Boundary> unaryFullyIntersectedNumberRanges = new ArrayList<>();
     final List<Boolean> isIntersectionWeak = new ArrayList<>();
     final List<Boolean> wasIntersectionInDoubt = new ArrayList<>();
 
@@ -59,9 +59,9 @@ public class DataParser {
                             new RowIntersection(sourceIntersectionIndex, targetIntersectionIndex,
                                     itemsLookedFor.get(sourceIntersectionIndex),
                                     itemsLookedThrough.get(targetIntersectionIndex),
-                                    new Range(new IntTuple(0, 0)),
+                                    new Boundary(new IntTuple(0, 0)),
                                     isWeak, wasInDoubt));
-                    unaryIntersectedNumberRanges.add(
+                    unaryFullyIntersectedNumberRanges.add(
                             unaryPartiallyIntersectedNumberRanges.get(numberIntersectionCounter)
                     );
                 }
@@ -75,8 +75,8 @@ public class DataParser {
         return intersections;
     }
 
-    public List<Range> getUnaryIntersectedNumberRanges() {
-        return unaryIntersectedNumberRanges;
+    public List<Boundary> getUnaryFullyIntersectedNumberRanges() {
+        return unaryFullyIntersectedNumberRanges;
     }
 
     /**
@@ -135,7 +135,7 @@ public class DataParser {
                         for (String unaryTargetNumber : unaryRange) {
                             if (unaryNumberLookedFor.equals(unaryTargetNumber)) {
                                 matchingTuples.add(new IntTuple(lookedForIterator, lookedThroughIterator));
-                                unaryPartiallyIntersectedNumberRanges.add(new Range(new StringTuple(
+                                unaryPartiallyIntersectedNumberRanges.add(new Boundary(new StringTuple(
                                         unaryRanges.get(unaryRangeCounter)
                                                 .get(0),
                                         unaryRanges.get(unaryRangeCounter)

@@ -2,7 +2,7 @@ package pl.witampanstwa.wordscrape;
 
 import pl.witampanstwa.wordscrape.structures.Building;
 import pl.witampanstwa.wordscrape.structures.IntTuple;
-import pl.witampanstwa.wordscrape.structures.Range;
+import pl.witampanstwa.wordscrape.structures.Boundary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,8 +102,8 @@ public class DataMatcher {
      * @param group
      * @return
      */
-    private List<Range> findAllMatchRanges(Pattern regex, String string, int group) {
-        List<Range> matchRanges = new ArrayList<>();
+    private List<Boundary> findAllMatchRanges(Pattern regex, String string, int group) {
+        List<Boundary> matchBoundaries = new ArrayList<>();
         Matcher matcher = regex.matcher(string);
 
         while (matcher.find()) {
@@ -112,10 +112,10 @@ public class DataMatcher {
                 int matchStart = matcher.start(group);
                 int matchEnd = matchStart + match.replaceAll("[ ,.;:]", "").length();
 
-                matchRanges.add(new Range(new IntTuple(matchStart, matchEnd)));
+                matchBoundaries.add(new Boundary(new IntTuple(matchStart, matchEnd)));
             }
         }
-        return matchRanges;
+        return matchBoundaries;
     }
 
     private String unidecode(String string) {

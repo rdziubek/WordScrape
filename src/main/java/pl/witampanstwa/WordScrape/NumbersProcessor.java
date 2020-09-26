@@ -1,5 +1,7 @@
 package pl.witampanstwa.wordscrape;
 
+import pl.witampanstwa.wordscrape.structures.Boundary;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +26,7 @@ public class NumbersProcessor {
      * Eliminates the possibility of omitting an exact number in a case `["2-4", "8", "14-20"]` by
      * filtering out ranges by building these on the fly and postponing for further processing
      * instead of doing such in-place.
+     * Takes care of preserving value-safety by leaving out original range extrema at the start and end of each range.
      *
      * @param numbers building's number/numbers
      * @return expanded numbers
@@ -41,7 +44,9 @@ public class NumbersProcessor {
                 unaryRange.append(currentAtom);
 
                 if (!currentAtom.endsWith("-")) {
+                    exactRanges.add(Boundary.makeDifferentiator(previousAtom));
                     exactRanges.addAll(decomposeRangeIntoExacts(unaryRange.toString()));
+                    exactRanges.add(Boundary.makeDifferentiator(currentAtom));
                     unaryRange = new StringBuilder();
                 }
             } else {
@@ -143,14 +148,13 @@ public class NumbersProcessor {
                     ? mask.get(unaryMaskingCharsIndex - 1)
                     : null);
 
-            if (!unaryMaskingChars.equals(previousUnaryMaskingChars)) {
-                System.out.println();
-                System.out.println("unaryMaskingChars = " + unaryMaskingChars);
+            if (previousUnaryMaskingChars == null
+                    || !unaryMaskingChars.chars().mapToObj(c -> (char) c).collect(Collectors.toList()).containsAll(
+                    previousUnaryMaskingChars.chars().mapToObj(c -> (char) c).collect(Collectors.toList()))) {
 
                 // Is single range-point mask not empty?
                 if (!unaryMaskingChars.equals("")) {
                     for (char singleChar : unaryMaskingChars.toCharArray()) {
-                        System.out.println("singleChar = " + singleChar);
                         String maskingChar = Character.toString(singleChar);
 
                         for (String number : numericalExpandedRange) {
@@ -165,9 +169,6 @@ public class NumbersProcessor {
             unaryMaskingCharsIndex++;
         }
 
-        System.out.println("numericalExpandedRange = " + numericalExpandedRange);
-        System.out.println("mask = " + mask);
-        System.out.println("maskedRange = " + maskedRange);
         return maskedRange;
     }
 }

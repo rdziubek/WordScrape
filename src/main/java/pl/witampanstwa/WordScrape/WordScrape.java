@@ -2,7 +2,7 @@ package pl.witampanstwa.wordscrape;
 
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import pl.witampanstwa.wordscrape.report.ReportWriter;
-import pl.witampanstwa.wordscrape.structures.Range;
+import pl.witampanstwa.wordscrape.structures.Boundary;
 import pl.witampanstwa.wordscrape.structures.RowIntersection;
 
 import java.io.File;
@@ -46,8 +46,8 @@ public class WordScrape {
         }
 
         try {
-            List<Range> rowIntersectionsAtNumberRanges = new ValueToIndexMapper(
-                    dataParser.getUnaryIntersectedNumberRanges(),
+            List<Boundary> rowIntersectionsAtNumberRanges = new ValueToIndexMapper(
+                    dataParser.getUnaryFullyIntersectedNumberRanges(),
                     dataParser.getIntersections(),
                     rowsLookedThrough).getAbsoluteRangeBoundaries();
 
