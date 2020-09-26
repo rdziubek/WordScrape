@@ -14,6 +14,7 @@ public class DocumentStyler {
     public DocumentStyler(String bareContent,
                           int styleStart, int styleEnd,
                           boolean weak, boolean doubt) {
+
         styledContent = markConfidenceAt(bareContent, styleStart, styleEnd);
         if (weak || doubt) {
             styledContent = markWeak(styledContent);
@@ -25,7 +26,7 @@ public class DocumentStyler {
     }
 
     /**
-     * Puts a styled span in between 2 indexes (both inclusive)
+     * Puts a styled span in-between 2 indexes (both inclusive)
      *
      * @param string
      * @param startIndex

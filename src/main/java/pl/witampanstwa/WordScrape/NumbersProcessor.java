@@ -1,5 +1,7 @@
 package pl.witampanstwa.wordscrape;
 
+import pl.witampanstwa.wordscrape.structures.Boundary;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +26,7 @@ public class NumbersProcessor {
      * Eliminates the possibility of omitting an exact number in a case `["2-4", "8", "14-20"]` by
      * filtering out ranges by building these on the fly and postponing for further processing
      * instead of doing such in-place.
+     * Takes care of preserving value-safety by leaving out original range extrema at the start and end of each range.
      *
      * @param numbers building's number/numbers
      * @return expanded numbers
@@ -41,7 +44,9 @@ public class NumbersProcessor {
                 unaryRange.append(currentAtom);
 
                 if (!currentAtom.endsWith("-")) {
+                    exactRanges.add(Boundary.makeDifferentiator(previousAtom));
                     exactRanges.addAll(decomposeRangeIntoExacts(unaryRange.toString()));
+                    exactRanges.add(Boundary.makeDifferentiator(currentAtom));
                     unaryRange = new StringBuilder();
                 }
             } else {
@@ -130,23 +135,38 @@ public class NumbersProcessor {
     /**
      * Distributes characters by applying every single one of these onto a whole range.
      *
-     * @param numericalExpandedRange
-     * @param mask
+     * @param numericalExpandedRange has size <= `mask`'s size
+     * @param mask                   can have size non-equal to the one of `numericalExpandedRange`
      * @return
      */
     private List<String> applyACharMaskVerbosely(List<String> numericalExpandedRange, List<String> mask) {
         List<String> maskedRange = new ArrayList<>();
 
-        int currentMaskingChar = 0;
-        for (String maskingChar : mask) {
-            String previousMaskingChar = (currentMaskingChar > 0 ? mask.get(currentMaskingChar - 1) : null);
-            if (!maskingChar.equals(previousMaskingChar)) {
-                for (String number : numericalExpandedRange) {
-                    maskedRange.add(number + maskingChar);
+        int unaryMaskingCharsIndex = 0;
+        for (String unaryMaskingChars : mask) {
+            String previousUnaryMaskingChars = (unaryMaskingCharsIndex > 0
+                    ? mask.get(unaryMaskingCharsIndex - 1)
+                    : null);
+
+            if (previousUnaryMaskingChars == null
+                    || !unaryMaskingChars.chars().mapToObj(c -> (char) c).collect(Collectors.toList()).containsAll(
+                    previousUnaryMaskingChars.chars().mapToObj(c -> (char) c).collect(Collectors.toList()))) {
+
+                // Is single range-point mask not empty?
+                if (!unaryMaskingChars.equals("")) {
+                    for (char singleChar : unaryMaskingChars.toCharArray()) {
+                        String maskingChar = Character.toString(singleChar);
+
+                        for (String number : numericalExpandedRange) {
+                            maskedRange.add(number + maskingChar);
+                        }
+                    }
+                } else {
+                    maskedRange.addAll(numericalExpandedRange);
                 }
             }
 
-            currentMaskingChar++;
+            unaryMaskingCharsIndex++;
         }
 
         return maskedRange;

@@ -1,7 +1,7 @@
 package pl.witampanstwa.wordscrape.report;
 
 import pl.witampanstwa.wordscrape.report.structures.Document;
-import pl.witampanstwa.wordscrape.structures.Range;
+import pl.witampanstwa.wordscrape.structures.Boundary;
 import pl.witampanstwa.wordscrape.structures.RowIntersection;
 
 import java.io.BufferedWriter;
@@ -15,7 +15,7 @@ public class ReportWriter {
 
     public ReportWriter(List<RowIntersection> intersections,
                         List<String> sourceRows, List<String> targetRows,
-                        List<Range> rowIntersectionsAtNumberRanges)
+                        List<Boundary> rowIntersectionsAtNumberRanges)
             throws IOException {
         bufferedWrite(new Document(
                 intersections,

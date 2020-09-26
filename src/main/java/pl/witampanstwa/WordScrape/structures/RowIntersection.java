@@ -6,7 +6,7 @@ public class RowIntersection {
     private final int indexItemLookedThrough;
     private final Building modelLookedFor;
     private final Building modelLookedThrough;
-    private Range unaryIntersectedNumberRanges;
+    private Boundary unaryIntersectedNumberRanges;
     private final boolean isWeak;
     private final boolean wasInDoubt;
 
@@ -22,7 +22,7 @@ public class RowIntersection {
      */
     public RowIntersection(int indexItemLookedFor, int indexItemLookedThrough,
                            Building modelLookedFor, Building modelLookedThrough,
-                           Range unaryIntersectedNumberRanges,
+                           Boundary unaryIntersectedNumberRanges,
                            boolean isWeak, boolean wasInDoubt) {
         this.indexItemLookedFor = indexItemLookedFor;
         this.indexItemLookedThrough = indexItemLookedThrough;
@@ -49,11 +49,11 @@ public class RowIntersection {
         return modelLookedThrough;
     }
 
-    public Range getUnaryIntersectedNumberRanges() {
+    public Boundary getUnaryIntersectedNumberRanges() {
         return unaryIntersectedNumberRanges;
     }
 
-    public void setUnaryIntersectedNumberRanges(Range unaryIntersectedNumberRanges) {
+    public void setUnaryIntersectedNumberRanges(Boundary unaryIntersectedNumberRanges) {
         this.unaryIntersectedNumberRanges = unaryIntersectedNumberRanges;
     }
 
