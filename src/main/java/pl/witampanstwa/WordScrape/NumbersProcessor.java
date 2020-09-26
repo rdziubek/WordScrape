@@ -130,25 +130,44 @@ public class NumbersProcessor {
     /**
      * Distributes characters by applying every single one of these onto a whole range.
      *
-     * @param numericalExpandedRange
-     * @param mask
+     * @param numericalExpandedRange has size <= `mask`'s size
+     * @param mask                   can have size non-equal to the one of `numericalExpandedRange`
      * @return
      */
     private List<String> applyACharMaskVerbosely(List<String> numericalExpandedRange, List<String> mask) {
         List<String> maskedRange = new ArrayList<>();
 
-        int currentMaskingChar = 0;
-        for (String maskingChar : mask) {
-            String previousMaskingChar = (currentMaskingChar > 0 ? mask.get(currentMaskingChar - 1) : null);
-            if (!maskingChar.equals(previousMaskingChar)) {
-                for (String number : numericalExpandedRange) {
-                    maskedRange.add(number + maskingChar);
+        int unaryMaskingCharsIndex = 0;
+        for (String unaryMaskingChars : mask) {
+            String previousUnaryMaskingChars = (unaryMaskingCharsIndex > 0
+                    ? mask.get(unaryMaskingCharsIndex - 1)
+                    : null);
+
+            if (!unaryMaskingChars.equals(previousUnaryMaskingChars)) {
+                System.out.println();
+                System.out.println("unaryMaskingChars = " + unaryMaskingChars);
+
+                // Is single range-point mask not empty?
+                if (!unaryMaskingChars.equals("")) {
+                    for (char singleChar : unaryMaskingChars.toCharArray()) {
+                        System.out.println("singleChar = " + singleChar);
+                        String maskingChar = Character.toString(singleChar);
+
+                        for (String number : numericalExpandedRange) {
+                            maskedRange.add(number + maskingChar);
+                        }
+                    }
+                } else {
+                    maskedRange.addAll(numericalExpandedRange);
                 }
             }
 
-            currentMaskingChar++;
+            unaryMaskingCharsIndex++;
         }
 
+        System.out.println("numericalExpandedRange = " + numericalExpandedRange);
+        System.out.println("mask = " + mask);
+        System.out.println("maskedRange = " + maskedRange);
         return maskedRange;
     }
 }
