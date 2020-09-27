@@ -8,9 +8,9 @@ import pl.witampanstwa.wordscrape.structures.Type;
 import static j2html.TagCreator.*;
 
 public class DocumentStyler {
-    private static final String classMatchedRange = "matched_range";
-    private static final String classDrunkIndicator = "drunk_indicator";
-    private static final String classSelectionBar = "selection_bar";
+    private static final String CLASS_MATCHED_RANGE = "matched_range";
+    private static final String CLASS_DRUNK_INDICATOR = "drunk_indicator";
+    private static final String CLASS_SELECTION_BAR = "selection_bar";
     private ContainerTag styledContent;
 
     public DocumentStyler(String bareContent,
@@ -43,26 +43,26 @@ public class DocumentStyler {
                 || startIndex > string.length() - 1 || endIndex > string.length()) {
             return anonymousContainer(
                     new Text(string), br(),
-                    span("Bardzo dziwny zakres! 😧").withClass(classDrunkIndicator));
+                    span("Bardzo dziwny zakres! 😧").withClass(CLASS_DRUNK_INDICATOR));
         }
 
         return anonymousContainer(
                 new Text(string.substring(0, startIndex)),
-                span(string.substring(startIndex, endIndex)).withClass(classMatchedRange),
+                span(string.substring(startIndex, endIndex)).withClass(CLASS_MATCHED_RANGE),
                 new Text(string.substring(endIndex)));
     }
 
     private ContainerTag markWeak(ContainerTag container) {
         return anonymousContainer(
                 container, br(),
-                span("Niedokładnie! 🤔").withClass(classDrunkIndicator)
+                span("Niedokładnie! 🤔").withClass(CLASS_DRUNK_INDICATOR)
         );
     }
 
     private ContainerTag insertSelectionBar(ContainerTag container) {
         return anonymousContainer(
                 container,
-                div().withClass(classSelectionBar)
+                div().withClass(CLASS_SELECTION_BAR)
         );
     }
 

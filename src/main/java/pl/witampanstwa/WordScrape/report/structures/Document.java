@@ -1,7 +1,6 @@
 package pl.witampanstwa.wordscrape.report.structures;
 
 import pl.witampanstwa.wordscrape.report.DocumentStyler;
-import pl.witampanstwa.wordscrape.report.ResourceFetcher;
 import pl.witampanstwa.wordscrape.structures.Boundary;
 import pl.witampanstwa.wordscrape.structures.RowIntersection;
 import pl.witampanstwa.wordscrape.structures.Type;
@@ -11,7 +10,7 @@ import java.util.List;
 import static j2html.TagCreator.*;
 
 public class Document {
-    private static final String classWrapper = "wrapper";
+    private static final String CLASS_WRAPPER = "wrapper";
     private final String document;
 
     public Document(List<RowIntersection> intersections,
@@ -75,7 +74,7 @@ public class Document {
                                                         ).getStyledContent()))
                                                 )
                                         )
-                                )).withClass(classWrapper)
+                                )).withClass(CLASS_WRAPPER)
                         ), scriptWithInlineFile("/scripts/main.js")
                 ).withLang("pl")
         );
