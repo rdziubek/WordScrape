@@ -4,6 +4,7 @@ import j2html.tags.ContainerTag;
 import j2html.tags.DomContent;
 import j2html.tags.Text;
 
+import static j2html.TagCreator.br;
 import static j2html.TagCreator.span;
 
 public class DocumentStyler {
@@ -13,10 +14,10 @@ public class DocumentStyler {
 
     public DocumentStyler(String bareContent,
                           int styleStart, int styleEnd,
-                          boolean weak, boolean doubt) {
+                          boolean weak) {
 
         styledContent = markConfidenceAt(bareContent, styleStart, styleEnd);
-        if (weak || doubt) {
+        if (weak) {
             styledContent = markWeak(styledContent);
         }
     }
@@ -34,15 +35,19 @@ public class DocumentStyler {
      * @return
      */
     private ContainerTag markConfidenceAt(String string, int startIndex, int endIndex) {
-        return new ContainerTag("").with(
+        return anonymousContainer(
                 new Text(string.substring(0, startIndex)),
                 span(string.substring(startIndex, endIndex)).withClass(classMatchedRange),
                 new Text(string.substring(endIndex)));
     }
 
     private ContainerTag markWeak(ContainerTag container) {
-        return new ContainerTag("").with(
+        return anonymousContainer(
                 span(container).withClass(classWeakMatch)
         );
+    }
+
+    private ContainerTag anonymousContainer(DomContent... children) {
+        return new ContainerTag("").with(children);
     }
 }

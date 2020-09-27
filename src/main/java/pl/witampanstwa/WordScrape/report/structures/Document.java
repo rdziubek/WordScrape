@@ -61,16 +61,14 @@ public class Document {
                                                                                 .getNumberMatchRanges()
                                                                                 .size() - 1)
                                                                         .getIndices().getRight(),
-                                                                intersection.isWeak(),
-                                                                intersection.wasInDoubt()
+                                                                intersection.isWeak()
                                                         ).getStyledContent(), td(new DocumentStyler(
                                                                 targetRows.get(intersection.getIndexItemLookedThrough()),
                                                                 intersection.getUnaryIntersectedNumberRanges()
                                                                         .getIndices().getLeft(),
                                                                 intersection.getUnaryIntersectedNumberRanges()
                                                                         .getIndices().getRight(),
-                                                                intersection.isWeak(),
-                                                                intersection.wasInDoubt()
+                                                                intersection.isWeak()
                                                         ).getStyledContent())))
                                                 )
                                         )
