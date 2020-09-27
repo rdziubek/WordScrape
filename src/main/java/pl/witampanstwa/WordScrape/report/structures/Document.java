@@ -1,6 +1,5 @@
 package pl.witampanstwa.wordscrape.report.structures;
 
-import j2html.TagCreator;
 import pl.witampanstwa.wordscrape.report.DocumentStyler;
 import pl.witampanstwa.wordscrape.report.ResourceFetcher;
 import pl.witampanstwa.wordscrape.structures.Boundary;
@@ -11,6 +10,7 @@ import java.util.List;
 import static j2html.TagCreator.*;
 
 public class Document {
+    private static final String classWrapper = "wrapper";
     private final String document;
 
     public Document(List<RowIntersection> intersections,
@@ -40,9 +40,10 @@ public class Document {
                         head(
                                 title("Intersekcje"),
                                 meta().withCharset("UTF-8"),
-                                TagCreator.style(new ResourceFetcher("/css/main.css").getContent())
+                                styleWithInlineFile("/css/main.css"),
+                                scriptWithInlineFile("/scripts/main.js")
                         ),
-                        body(
+                        body(div(
                                 table(
                                         tbody(
                                                 tr(
@@ -62,17 +63,17 @@ public class Document {
                                                                                 .size() - 1)
                                                                         .getIndices().getRight(),
                                                                 intersection.isWeak()
-                                                        ).getStyledContent(), td(new DocumentStyler(
+                                                        ).getStyledContent()), td(new DocumentStyler(
                                                                 targetRows.get(intersection.getIndexItemLookedThrough()),
                                                                 intersection.getUnaryIntersectedNumberRanges()
                                                                         .getIndices().getLeft(),
                                                                 intersection.getUnaryIntersectedNumberRanges()
                                                                         .getIndices().getRight(),
                                                                 intersection.isWeak()
-                                                        ).getStyledContent())))
+                                                        ).getStyledContent()))
                                                 )
                                         )
-                                )
+                                )).withClass(classWrapper)
                         )
                 )
         );
