@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
  * Processes collected objects / collections of objects.
  * If street's key equals the number's key, these belong to the same record.
  * Intersection properties are loaded on the fly as the base logic / object initialisation is evaluated.
+ * A match that is being looked for will NOT get added to the tied matched input pairs (i.e. intersection list) if
+ * it is directly preceded by one with identical match properties (that is, based on match tuple--
+ * this way twin rows are still allowed in the input data).
  */
 public class DataParser {
     private static final int STREET_INTERSECTION_TOLERANCE_PERCENT = 20;
@@ -44,23 +47,23 @@ public class DataParser {
             int numberIntersectionCounter = 0;
             for (IntTuple numbers : intersectedNumbers) {
                 if (streets.getLeft() == numbers.getLeft()
-                        && streets.getRight() == numbers.getRight()) {
+                        && streets.getRight() == numbers.getRight()
+                        && (intersections.size() == 0
+                        || intersections.get(intersections.size() - 1).getIndexItemLookedFor() != numbers.getLeft()
+                        && intersections.get(intersections.size() - 1).getIndexItemLookedFor() != streets.getLeft())) {
 
                     // Street and number pairs are tied together at this point
-                    int sourceIntersectionIndex = streets.getLeft();
-                    int targetIntersectionIndex = streets.getRight();
+                    int lookedForIntersectionIndex = streets.getLeft();
+                    int lookedThroughIntersectionIndex = streets.getRight();
 
                     boolean isWeak = isIntersectionWeak.get(streetIntersectionCounter);
-//                    boolean wasInDoubt = wasIntersectionInDoubt.get(streetIntersectionCounter)
-//                            || wasIntersectionInDoubt.get(numberIntersectionCounter);
-                    boolean wasInDoubt = false;
 
                     intersections.add(
-                            new RowIntersection(sourceIntersectionIndex, targetIntersectionIndex,
-                                    itemsLookedFor.get(sourceIntersectionIndex),
-                                    itemsLookedThrough.get(targetIntersectionIndex),
+                            new RowIntersection(lookedForIntersectionIndex, lookedThroughIntersectionIndex,
+                                    itemsLookedFor.get(lookedForIntersectionIndex),
+                                    itemsLookedThrough.get(lookedThroughIntersectionIndex),
                                     new Boundary(new IntTuple(0, 0)),
-                                    isWeak, wasInDoubt));
+                                    isWeak));
                     unaryFullyIntersectedNumberRanges.add(
                             unaryPartiallyIntersectedNumberRanges.get(numberIntersectionCounter)
                     );

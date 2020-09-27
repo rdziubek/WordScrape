@@ -8,7 +8,6 @@ public class RowIntersection {
     private final Building modelLookedThrough;
     private Boundary unaryIntersectedNumberRanges;
     private final boolean isWeak;
-    private final boolean wasInDoubt;
 
     /**
      * @param indexItemLookedFor
@@ -17,20 +16,17 @@ public class RowIntersection {
      * @param modelLookedThrough
      * @param isWeak                 describes whether the street name match relied on the string-hamming /
      *                               Levenshtein distance with a non-zero result.
-     * @param wasInDoubt             describes whether the record contained more than one street name, and/or the targetModel
-     *                               expanded numbers contained more than one occurrence of sourceModel's expanded numbers.
      */
     public RowIntersection(int indexItemLookedFor, int indexItemLookedThrough,
                            Building modelLookedFor, Building modelLookedThrough,
                            Boundary unaryIntersectedNumberRanges,
-                           boolean isWeak, boolean wasInDoubt) {
+                           boolean isWeak) {
         this.indexItemLookedFor = indexItemLookedFor;
         this.indexItemLookedThrough = indexItemLookedThrough;
         this.modelLookedFor = modelLookedFor;
         this.modelLookedThrough = modelLookedThrough;
         this.unaryIntersectedNumberRanges = unaryIntersectedNumberRanges;
         this.isWeak = isWeak;
-        this.wasInDoubt = wasInDoubt;
     }
 
     public int getIndexItemLookedFor() {
@@ -59,9 +55,5 @@ public class RowIntersection {
 
     public boolean isWeak() {
         return isWeak;
-    }
-
-    public boolean wasInDoubt() {
-        return wasInDoubt;
     }
 }

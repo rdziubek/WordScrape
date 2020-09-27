@@ -4,6 +4,7 @@ import pl.witampanstwa.wordscrape.structures.Boundary;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,8 @@ public class NumbersProcessor {
      * Takes care of preserving value-safety by leaving out original range extrema at the start and end of each range.
      *
      * @param numbers building's number/numbers
-     * @return expanded numbers
+     * @return fully expanded exact numbers as well as ranges, with ranges delimited by match differentiators
+     * accordingly
      */
     private List<List<String>> process(List<String> numbers) {
         List<List<String>> exactNumbers = new ArrayList<>();
@@ -134,27 +136,33 @@ public class NumbersProcessor {
 
     /**
      * Distributes characters by applying every single one of these onto a whole range.
+     * Passed in range-points are processed after removal of all char duplicates--it is important not to remove
+     * all point duplicates from the mask itself like this and only check if a single point a duplicate of the one
+     * previously checked as a range can be comprised of more than 2 points, e.g. `aa-bb-aa`--in this particular case
+     * it is only desired to get rid of nested duplicates only.
      *
      * @param numericalExpandedRange has size <= `mask`'s size
      * @param mask                   can have size non-equal to the one of `numericalExpandedRange`
-     * @return
+     * @return fully expanded range
      */
     private List<String> applyACharMaskVerbosely(List<String> numericalExpandedRange, List<String> mask) {
         List<String> maskedRange = new ArrayList<>();
 
         int unaryMaskingCharsIndex = 0;
-        for (String unaryMaskingChars : mask) {
-            String previousUnaryMaskingChars = (unaryMaskingCharsIndex > 0
+        for (String maskPoint : mask) {
+            String previousMaskPoint = (unaryMaskingCharsIndex > 0
                     ? mask.get(unaryMaskingCharsIndex - 1)
                     : null);
 
-            if (previousUnaryMaskingChars == null
-                    || !unaryMaskingChars.chars().mapToObj(c -> (char) c).collect(Collectors.toList()).containsAll(
-                    previousUnaryMaskingChars.chars().mapToObj(c -> (char) c).collect(Collectors.toList()))) {
+            if (previousMaskPoint == null
+                    || !maskPoint.chars().mapToObj(c -> (char) c).collect(Collectors.toList()).containsAll(
+                    previousMaskPoint.chars().mapToObj(c -> (char) c).collect(Collectors.toList()))) {
+
+                String simplifiedMaskPoint = simplifyMaskPoint(maskPoint);
 
                 // Is single range-point mask not empty?
-                if (!unaryMaskingChars.equals("")) {
-                    for (char singleChar : unaryMaskingChars.toCharArray()) {
+                if (!simplifiedMaskPoint.equals("")) {
+                    for (char singleChar : simplifiedMaskPoint.toCharArray()) {
                         String maskingChar = Character.toString(singleChar);
 
                         for (String number : numericalExpandedRange) {
@@ -169,6 +177,21 @@ public class NumbersProcessor {
             unaryMaskingCharsIndex++;
         }
 
+        System.out.println("mask = " + mask);
+        System.out.println("numericalExpandedRange = " + numericalExpandedRange);
+        System.out.println("maskedRange = " + maskedRange);
         return maskedRange;
+    }
+
+    /**
+     * Removes all duplicate characters from a single mask point not to produce twin match tuples
+     *
+     * @param point String containing possible char duplicates
+     * @return HashSet of a String
+     */
+    private String simplifyMaskPoint(String point) {
+        return Arrays.stream(point.split(""))
+                .distinct()
+                .collect(Collectors.joining());
     }
 }
