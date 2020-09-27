@@ -3,24 +3,26 @@ package pl.witampanstwa.wordscrape.report;
 import j2html.tags.ContainerTag;
 import j2html.tags.DomContent;
 import j2html.tags.Text;
+import pl.witampanstwa.wordscrape.structures.Type;
 
-import static j2html.TagCreator.br;
-import static j2html.TagCreator.span;
+import static j2html.TagCreator.*;
 
 public class DocumentStyler {
     private static final String classMatchedRange = "matched_range";
-    private static final String classWeakMatch = "weak_match";
     private static final String classDrunkIndicator = "drunk_indicator";
+    private static final String classSelectionBar = "selection_bar";
     private ContainerTag styledContent;
 
     public DocumentStyler(String bareContent,
                           int styleStart, int styleEnd,
-                          boolean weak) {
+                          boolean weak, Type contentType) {
 
         styledContent = markConfidenceAt(bareContent, styleStart, styleEnd);
-        if (weak) {
+        if (weak && contentType == Type.LOOKED_FOR) {
             styledContent = markWeak(styledContent);
         }
+
+        styledContent = insertSelectionBar(styledContent);
     }
 
     public DomContent getStyledContent() {
@@ -51,8 +53,16 @@ public class DocumentStyler {
     }
 
     private ContainerTag markWeak(ContainerTag container) {
-        return new ContainerTag("").with(
-                span(container).withClass(classWeakMatch)
+        return anonymousContainer(
+                container, br(),
+                span("Niedokładnie! 🤔").withClass(classDrunkIndicator)
+        );
+    }
+
+    private ContainerTag insertSelectionBar(ContainerTag container) {
+        return anonymousContainer(
+                container,
+                div().withClass(classSelectionBar)
         );
     }
 
