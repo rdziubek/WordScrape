@@ -1,8 +1,11 @@
 body {
-    font-family: Lato, Roboto, Verdana, sans-serif;
-    color: rgba(0, 0, 0, 0.87);
     padding: 0;
     margin: 0;
+}
+
+.wrapper {
+    font-family: Lato, Roboto, Verdana, sans-serif;
+    color: rgba(0, 0, 0, 0.87);
 }
 
 table {
@@ -12,17 +15,9 @@ table {
     border-spacing: 1em 0;
 }
 
-tbody * {
+tbody > * {
     overflow-x: auto;
     box-sizing: border-box;
-}
-
-tr:hover td {
-    border-bottom: solid .25em rgb(255, 54, 175);
-}
-
-tr:active td {
-    border-bottom: solid .25em rgb(255, 54, 175);
 }
 
 th {
@@ -43,14 +38,18 @@ td {
     margin: .25em 0;
 }
 
-.weak_match {
-    color: rgba(0, 0, 0, 0.38);
-}
-
 .drunk_indicator {
     color: white;
     background-color: rgb(255, 54, 175);
     display: inline-block;
     padding: .25em;
     margin: .25em 0;
+}
+
+.selection_bar {
+    background-color: rgb(255, 54, 175);
+    height: .25em;
+    width: 100%;
+    margin-top: .25em;
+    visibility: hidden;
 }

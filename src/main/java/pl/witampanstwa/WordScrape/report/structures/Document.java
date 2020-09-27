@@ -4,6 +4,7 @@ import pl.witampanstwa.wordscrape.report.DocumentStyler;
 import pl.witampanstwa.wordscrape.report.ResourceFetcher;
 import pl.witampanstwa.wordscrape.structures.Boundary;
 import pl.witampanstwa.wordscrape.structures.RowIntersection;
+import pl.witampanstwa.wordscrape.structures.Type;
 
 import java.util.List;
 
@@ -40,8 +41,7 @@ public class Document {
                         head(
                                 title("Intersekcje"),
                                 meta().withCharset("UTF-8"),
-                                styleWithInlineFile("/css/main.css"),
-                                scriptWithInlineFile("/scripts/main.js")
+                                styleWithInlineFile("/css/main.css")
                         ),
                         body(div(
                                 table(
@@ -62,20 +62,22 @@ public class Document {
                                                                                 .getNumberMatchRanges()
                                                                                 .size() - 1)
                                                                         .getIndices().getRight(),
-                                                                intersection.isWeak()
+                                                                intersection.isWeak(),
+                                                                Type.LOOKED_FOR
                                                         ).getStyledContent()), td(new DocumentStyler(
                                                                 targetRows.get(intersection.getIndexItemLookedThrough()),
                                                                 intersection.getUnaryIntersectedNumberRanges()
                                                                         .getIndices().getLeft(),
                                                                 intersection.getUnaryIntersectedNumberRanges()
                                                                         .getIndices().getRight(),
-                                                                intersection.isWeak()
+                                                                intersection.isWeak(),
+                                                                Type.LOOKED_THROUGH
                                                         ).getStyledContent()))
                                                 )
                                         )
                                 )).withClass(classWrapper)
-                        )
-                )
+                        ), scriptWithInlineFile("/scripts/main.js")
+                ).withLang("pl")
         );
     }
 }

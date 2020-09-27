@@ -177,9 +177,6 @@ public class NumbersProcessor {
             unaryMaskingCharsIndex++;
         }
 
-        System.out.println("mask = " + mask);
-        System.out.println("numericalExpandedRange = " + numericalExpandedRange);
-        System.out.println("maskedRange = " + maskedRange);
         return maskedRange;
     }
 
